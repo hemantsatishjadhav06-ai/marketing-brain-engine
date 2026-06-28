@@ -1,0 +1,35 @@
+{
+  "comment": "Control-plane tables used by marketing-brain. setup_airtable.py creates any that are missing.",
+  "tables": {
+    "Ideas": {
+      "fields": ["Topic", "Angle", "Source", "Signal Score", "Keyword", "Cluster", "Intent", "Status", "Created"],
+      "status_options": ["New", "Shortlisted", "Approved Idea", "Rejected", "Used"]
+    },
+    "Content": {
+      "fields": ["ID", "Topic", "Perspective", "Platform", "Style", "Format", "Status", "Owner",
+                 "Hook", "Caption", "Hashtags", "CTA", "Image Prompt", "Script", "Asset URLs",
+                 "Publish Date", "Approved By", "Notes"],
+      "status_options": ["Draft", "Generating", "Needs Review", "Approved", "Scheduled", "Published", "Rejected"]
+    },
+    "Assets": {
+      "fields": ["Content ID", "Type", "Provider", "URL", "Prompt", "Job ID", "Status", "Cost USD"],
+      "status_options": ["Queued", "Rendering", "Ready", "Failed"]
+    },
+    "Jobs": {
+      "fields": ["Agent", "Type", "Provider", "Status", "Cost USD", "Retries", "Error", "Created"],
+      "status_options": ["Queued", "Running", "Done", "Failed"]
+    },
+    "Calendar": {
+      "fields": ["Content ID", "Platform", "Publish Date", "Slot", "Status"],
+      "status_options": ["Planned", "Scheduled", "Published"]
+    },
+    "Performance": {
+      "fields": ["Content ID", "Platform", "Format", "Media", "Impressions", "Likes", "Comments",
+                 "Shares", "CTA Clicks", "Score", "Measured On"]
+    },
+    "Engagements": {
+      "fields": ["Content ID", "Type", "Target", "Draft", "Status"],
+      "status_options": ["Draft", "Approved", "Sent"]
+    }
+  }
+}

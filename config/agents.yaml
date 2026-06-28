@@ -1,0 +1,138 @@
+# The marketing-brain team. One orchestrator routes work; each specialist is dormant
+# until its stage fires. Stages: discover -> strategy -> create -> schedule -> publish -> engage -> analyze
+team:
+  - id: orchestrator
+    role: Conductor
+    stage: all
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Route work through the state machine, enforce budget + approval gates, retry on failure.
+
+  - id: trend_scout
+    role: Trend Scout
+    stage: discover
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Scan platforms + news for rising topics and engagement signals.
+    reads: [Brand]
+    writes: [Ideas]
+
+  - id: idea_miner
+    role: Idea Miner
+    stage: discover
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Turn raw signals into deduped, on-brand content ideas in the Idea Bank.
+    reads: [Ideas, Brand]
+    writes: [Ideas]
+
+  - id: seo_analyst
+    role: SEO Analyst
+    stage: discover
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Attach primary keyword + cluster + intent to each idea.
+    reads: [Ideas]
+    writes: [Ideas]
+
+  - id: strategist
+    role: Content Strategist
+    stage: strategy
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Choose format x media x platform per idea using past performance.
+    reads: [Ideas, Performance, Brand]
+    writes: [Content]
+
+  - id: copywriter
+    role: Copywriter
+    stage: create
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Produce hook, caption/body, CTA, hashtags as v1/v2/v3.
+    reads: [Content, Brand]
+    writes: [Content]
+
+  - id: designer
+    role: Designer
+    stage: create
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Image prompts + image/carousel generation.
+    providers: [image_flux, design_canva]
+    reads: [Content, Brand]
+    writes: [Assets, Jobs]
+
+  - id: video_producer
+    role: Video Producer
+    stage: create
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Short-form video + avatar video scripts and renders.
+    providers: [video_shortform, video_heygen]
+    reads: [Content, Brand]
+    writes: [Assets, Jobs]
+
+  - id: voice_artist
+    role: Voice Artist
+    stage: create
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Voiceover / audio from scripts.
+    providers: [voice_elevenlabs]
+    reads: [Content]
+    writes: [Assets, Jobs]
+
+  - id: editor
+    role: Editor
+    stage: create
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Assemble assets, proof copy, fit platform specs, set status to Needs Review.
+    reads: [Content, Assets]
+    writes: [Content]
+
+  - id: brand_guardian
+    role: Brand Guardian
+    stage: create
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Quality + safety gate. Enforce voice, banned words, claims. Can reject.
+    reads: [Content, Brand]
+    writes: [Content]
+
+  - id: scheduler
+    role: Scheduler
+    stage: schedule
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Place Approved content into per-platform calendar slots.
+    reads: [Content, Calendar]
+    writes: [Calendar, Content]
+
+  - id: publisher
+    role: Publisher
+    stage: publish
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Publish ONLY records a human marked Approved. Mock-publishes if no platform API.
+    reads: [Content, Calendar]
+    writes: [Content]
+
+  - id: community_manager
+    role: Community Manager
+    stage: engage
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Auto-comment, respond to comments, prospect engagement. Drafts await approval.
+    reads: [Content, Brand]
+    writes: [Engagements]
+
+  - id: analyst
+    role: Analyst
+    stage: analyze
+    model: claude-sonnet-4-6
+    enabled: true
+    mission: Pull performance, rank format x media x platform, feed the Strategist.
+    reads: [Content, Performance]
+    writes: [Performance]

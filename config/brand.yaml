@@ -1,0 +1,12 @@
+brand_name: "Your Brand"
+niche: "tennis gear"
+tone: "confident, knowledgeable, friendly - an expert who is easy to talk to"
+audience: "intermediate-to-advanced players who care about gear performance"
+power_words: [crisp, control, precision, effortless, tour-ready, dialled-in, upgrade]
+forbidden_words: [cheap, basic, just, very, revolutionary, game-changer]
+hashtag_bank: ["#tennis", "#tennisgear", "#racketreview", "#stringing"]
+platforms: [Instagram, X, LinkedIn, Website]
+writing_rules:
+  - Lead with the benefit.
+  - Short sentences, active voice, one idea per line.
+  - Always end with a clear CTA.

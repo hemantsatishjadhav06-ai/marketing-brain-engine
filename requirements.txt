@@ -1,0 +1,8 @@
+anthropic>=0.39
+requests>=2.31
+PyYAML>=6.0
+python-dotenv>=1.0
+tenacity>=8.2
+# optional, only needed for the Google Sheets control plane:
+# gspread>=6.0
+# google-auth>=2.30

@@ -1,0 +1,7 @@
+# Maps a capability to a provider adapter. Swap freely; missing API key => mock mode.
+llm:        llm_anthropic
+image:      image_flux
+design:     design_canva
+video_short: video_shortform
+video_avatar: video_heygen
+voice:      voice_elevenlabs
