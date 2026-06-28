@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marketing Brain — Content Engine</title>
+<style>
+:root{--ac:#4f46e5;--ac2:#7c3aed;--bg:#f6f7fb;--card:#fff;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;
+--gen:#d1fae5;--genT:#065f46;--rev:#fef3c7;--revT:#92400e;--app:#e0e7ff;--appT:#3730a3;--pub:#ccfbf1;--pubT:#115e59;--idea:#f1f5f9;--ideaT:#475569;}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1020;--card:#131a2e;--ink:#e7ecf5;--mut:#93a0b8;--line:#243049;
+--gen:#0c3b2e;--genT:#6ee7b7;--rev:#3a2c08;--revT:#fcd34d;--app:#23244d;--appT:#c7d2fe;--pub:#06302c;--pubT:#5eead4;--idea:#1b2540;--ideaT:#9fb0cc;}}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+a{color:var(--ac);text-decoration:none}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(90deg,var(--ac),var(--ac2));color:#fff;padding:14px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header h1{font-size:18px;margin:0;font-weight:600}
+.badge{background:rgba(255,255,255,.18);padding:4px 10px;border-radius:999px;font-size:12px}
+.badge.ok::before{content:"● ";color:#86efac}
+header .sp{flex:1}
+header a{color:#fff;font-size:13px;background:rgba(255,255,255,.16);padding:6px 12px;border-radius:8px}
+.wrap{max-width:1200px;margin:0 auto;padding:20px}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kpi .n{font-size:26px;font-weight:700}.kpi .l{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+.cols{display:grid;grid-template-columns:2fr 1fr;gap:18px}@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.panel h2{margin:0 0 12px;font-size:15px}
+.board{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px}
+.lane{min-width:190px;flex:1}
+.lane h3{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin:0 0 8px;display:flex;justify-content:space-between}
+.lane.gate h3{color:var(--revT)}
+.card{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px}
+.card .t{font-size:13px;font-weight:600;margin-bottom:6px}
+.tags{display:flex;gap:5px;flex-wrap:wrap}
+.tag{font-size:10px;padding:2px 7px;border-radius:999px;background:var(--idea);color:var(--ideaT)}
+.tag.pf{background:var(--app);color:var(--appT)}
+.media i{font-size:11px;color:var(--mut);margin-right:6px}
+.pill{font-size:10px;padding:2px 8px;border-radius:999px;font-weight:600}
+.s-Idea{background:var(--idea);color:var(--ideaT)}.s-Generating{background:var(--gen);color:var(--genT)}
+.s-Needs.Review,.s-Needs{background:var(--rev);color:var(--revT)}.s-Approved{background:var(--app);color:var(--appT)}.s-Published{background:var(--pub);color:var(--pubT)}
+.q{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px}
+.q .t{font-size:13px;font-weight:600}.q .hook{color:var(--mut);font-size:12px;margin:4px 0}
+.q .cap{font-size:12px;margin:6px 0}
+.btns{display:flex;gap:8px;margin-top:8px}
+button{font:inherit;border:0;border-radius:8px;padding:7px 12px;cursor:pointer;font-size:12px;font-weight:600}
+.approve{background:var(--ac);color:#fff}.reject{background:transparent;color:var(--mut);border:1px solid var(--line)}
+.empty{color:var(--mut);font-size:13px;padding:10px 0}
+.agents{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:8px}
+.agent{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:8px 10px}
+.agent .an{font-size:12px;font-weight:600}.agent .as{font-size:10px;color:var(--mut);text-transform:uppercase}
+.note{color:var(--mut);font-size:12px;margin-top:16px;text-align:center}
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+select{font:inherit;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+</style></head>
+<body>
+<header>
+  <h1>🧠 Marketing Brain</h1>
+  <span class="badge ok">CI passing</span>
+  <span class="badge" id="gate">0 awaiting approval</span>
+  <span class="sp"></span>
+  <a id="repo" href="#" target="_blank">View repo ↗</a>
+</header>
+<div class="wrap">
+  <div class="toolbar">
+    <strong>Content pipeline</strong>
+    <select id="pf" onchange="render()"><option value="">All platforms</option></select>
+    <span style="flex:1"></span>
+    <span class="note" style="margin:0">Sample run — human approval required before publish</span>
+  </div>
+  <div class="kpis" id="kpis"></div>
+  <div class="cols">
+    <div class="panel"><h2>Pipeline board</h2><div class="board" id="board"></div></div>
+    <div class="panel"><h2>Approval queue — your call</h2><div id="queue"></div></div>
+  </div>
+  <div class="panel" style="margin-top:18px"><h2>The agent team</h2><div class="agents" id="agents"></div></div>
+  <div class="note">Front end for <span id="reponame"></span> · data embedded, no backend required · approvals here are a live demo.</div>
+</div>
+<script>const DATA = {"brand": {"name": "Marketing Brain", "niche": "tennis gear", "accent": "#4f46e5"}, "repo": "https://github.com/hemantsatishjadhav06-ai/marketing-brain-engine", "agents": [{"name": "Orchestrator", "stage": "all"}, {"name": "Trend Scout", "stage": "discover"}, {"name": "Idea Miner", "stage": "discover"}, {"name": "SEO Analyst", "stage": "discover"}, {"name": "Strategist", "stage": "strategy"}, {"name": "Copywriter", "stage": "create"}, {"name": "Designer", "stage": "create"}, {"name": "Video Producer", "stage": "create"}, {"name": "Voice Artist", "stage": "create"}, {"name": "Editor", "stage": "create"}, {"name": "Brand Guardian", "stage": "create"}, {"name": "Scheduler", "stage": "schedule"}, {"name": "Publisher", "stage": "publish"}, {"name": "Community Manager", "stage": "engage"}, {"name": "Analyst", "stage": "analyze"}], "content": [{"id": "c1", "topic": "Why string tension actually matters", "platform": "X", "style": "Text", "status": "Idea", "perspective": "myth-busting"}, {"id": "c2", "topic": "5 racket grips ranked by control", "platform": "Instagram", "style": "Post", "status": "Idea", "perspective": "listicle"}, {"id": "c3", "topic": "The truth about 'pro' strings", "platform": "LinkedIn", "style": "Text", "status": "Idea", "perspective": "thought leadership"}, {"id": "c4", "topic": "Slow-mo: a clean one-handed backhand", "platform": "Instagram", "style": "Video", "status": "Generating", "perspective": "how-to"}, {"id": "c5", "topic": "Summer racket collection teaser", "platform": "Website", "style": "Text & Image", "status": "Generating", "perspective": "launch"}, {"id": "c6", "topic": "Babolat Pure Strike Team review", "platform": "Instagram", "style": "Video", "status": "Needs Review", "hook": "The control freak's racket just got lighter.", "caption": "Spin, control, and a crisp pocketed feel \u2014 here's why the Pure Strike Team belongs in advanced bags.", "hashtags": "#babolat #purestrike #tennisgear", "cta": "Shop the Pure Strike Team", "assets": ["image", "audio", "video"]}, {"id": "c7", "topic": "3 stringing mistakes killing your spin", "platform": "LinkedIn", "style": "AI Avatar", "status": "Needs Review", "hook": "You're losing spin before you even swing.", "caption": "Three stringing mistakes most players make \u2014 and the 30-second fix for each.", "hashtags": "#stringing #tennistips", "cta": "Book a re-string", "assets": ["image", "video"]}, {"id": "c8", "topic": "Poll: how often do you re-string?", "platform": "X", "style": "Text", "status": "Needs Review", "hook": "Be honest \u2014 when did you last re-string? \ud83c\udfbe", "caption": "Most club players wait 3x too long. Vote and see where you land.", "hashtags": "#tennis #poll", "cta": "Vote now", "assets": []}, {"id": "c9", "topic": "Behind the scenes: stringing a tour racket", "platform": "LinkedIn", "style": "Video", "status": "Approved", "hook": "60 seconds, 18 metres of string, 1 happy pro.", "caption": "Ever wondered what goes into a tour-ready racket? Here's the full process.", "hashtags": "#craftsmanship #tennis", "cta": "Follow for more", "assets": ["image", "video", "audio"]}, {"id": "c10", "topic": "New arrivals: 2026 summer collection", "platform": "Website", "style": "Text & Image", "status": "Published", "hook": "Your summer game starts here.", "caption": "Fresh frames, brighter strings, faster pickups. Explore the 2026 summer collection.", "hashtags": "#newarrivals", "cta": "Browse the collection", "assets": ["image"], "impressions": 4120, "likes": 287, "score": 7.4}, {"id": "c11", "topic": "How to choose your first serious racket", "platform": "Instagram", "style": "Post", "status": "Published", "hook": "Buying your first 'real' racket? Read this.", "caption": "Weight, balance, string pattern \u2014 the 3 things that actually matter, explained simply.", "hashtags": "#tennisgear #beginners", "cta": "Get the guide", "assets": ["image"], "impressions": 2980, "likes": 201, "score": 6.8}, {"id": "c12", "topic": "Babolat vs Wilson: control showdown", "platform": "X", "style": "Text", "status": "Published", "hook": "Babolat or Wilson for control? The data says\u2026", "caption": "We strung both at identical tension and measured. Here's what we found.", "hashtags": "#babolat #wilson #tennis", "cta": "See the breakdown", "assets": [], "impressions": 5310, "likes": 372, "score": 8.1}]};</script>
+<script>
+const LANES=[["Idea","Idea bank"],["Generating","Drafting"],["Needs Review","Needs review"],["Approved","Approved"],["Published","Published"]];
+let items = DATA.content.map(c=>Object.assign({},c));
+document.getElementById('repo').href=DATA.repo;
+document.getElementById('reponame').textContent=DATA.repo.split('/').slice(-2).join('/');
+(function(){const pf=document.getElementById('pf');[...new Set(DATA.content.map(c=>c.platform))].forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;pf.appendChild(o);});})();
+function f(){const p=document.getElementById('pf').value;return items.filter(c=>!p||c.platform===p);}
+function media(c){return (c.assets||[]).map(a=>'<i>'+({image:'🖼 image',video:'🎬 video',audio:'🔊 voice'}[a]||a)+'</i>').join('');}
+function card(c){return '<div class="card"><div class="t">'+c.topic+'</div><div class="tags"><span class="tag">'+c.platform+'</span><span class="tag">'+c.style+'</span>'+(c.score?'<span class="tag pf">score '+c.score+'</span>':'')+'</div>'+(c.assets&&c.assets.length?'<div class="media" style="margin-top:6px">'+media(c)+'</div>':'')+'</div>';}
+function render(){
+  const data=f();
+  const counts={};LANES.forEach(l=>counts[l[0]]=0);data.forEach(c=>counts[c.status]=(counts[c.status]||0)+1);
+  const pub=data.filter(c=>c.status==='Published');
+  const avg=pub.length?(pub.reduce((s,c)=>s+(c.score||0),0)/pub.length).toFixed(1):'–';
+  document.getElementById('kpis').innerHTML=[
+    ['Total pieces',data.length],['In production',(counts['Generating']||0)+(counts['Idea']||0)],
+    ['Awaiting approval',counts['Needs Review']||0],['Published',counts['Published']||0],['Avg score',avg]
+  ].map(k=>'<div class="kpi"><div class="n">'+k[1]+'</div><div class="l">'+k[0]+'</div></div>').join('');
+  document.getElementById('gate').textContent=(counts['Needs Review']||0)+' awaiting approval';
+  document.getElementById('board').innerHTML=LANES.map(l=>{
+    const cs=data.filter(c=>c.status===l[0]);
+    return '<div class="lane'+(l[0]==='Needs Review'?' gate':'')+'"><h3><span>'+l[1]+'</span><span>'+cs.length+'</span></h3>'+(cs.map(card).join('')||'<div class="empty">—</div>')+'</div>';
+  }).join('');
+  const q=data.filter(c=>c.status==='Needs Review');
+  document.getElementById('queue').innerHTML=q.length?q.map(c=>'<div class="q"><div class="t">'+c.topic+'</div><div class="hook">'+(c.hook||'')+'</div><div class="cap">'+(c.caption||'')+'</div><div class="tags"><span class="tag">'+c.platform+'</span><span class="tag">'+c.style+'</span></div><div class="btns"><button class="approve" onclick="act(\''+c.id+'\',\'Published\')">Approve &amp; publish</button><button class="reject" onclick="act(\''+c.id+'\',\'Rejected\')">Reject</button></div></div>').join(''):'<div class="empty">Nothing waiting — you\'re all caught up.</div>';
+}
+function act(id,to){const it=items.find(c=>c.id===id);if(it){it.status=to;if(to==='Published'&&!it.score)it.score=(6+Math.random()*3).toFixed(1);}render();}
+document.getElementById('agents').innerHTML=DATA.agents.map(a=>'<div class="agent"><div class="an">'+a.name+'</div><div class="as">'+a.stage+'</div></div>').join('');
+render();
+</script>
+</body></html>
