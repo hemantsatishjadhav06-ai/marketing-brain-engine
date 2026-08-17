@@ -51,3 +51,40 @@ from marketing_brain.providers import get_provider
 get_provider("image_flux").generate("test prompt", ratio="4:5")
 PY
 ```
+
+---
+
+# The scheduled workflows are green and inert
+
+Separate from the provider stubs, and more consequential: the cron workflows have
+run **989 times** and produced nothing. Every run succeeds, so nothing signals it.
+
+Two consecutive scheduled runs on `main`, straight from the job logs:
+
+```
+discover  2026-08-16T06:29:28   trend_scout created: 3   idea_miner shortlisted: 3   seo_analyst tagged: 3
+create    2026-08-17T01:12:48   copywriter written: 0    designer images: 0    video_producer videos: 0
+                                voice_artist voiceovers: 0    editor assembled: 0
+                                brand_guardian rejected: 0, awaiting_human_approval: 0
+```
+
+`discover` mines 3 ideas; `create` then finds zero rows to work on. The `create`
+step completes in **1 second** — no LLM call is ever made.
+
+## Why
+
+`settings.control_plane` picks Airtable only when `AIRTABLE_API_KEY` **and**
+`AIRTABLE_BASE_ID` are both set. Without the secret it falls back to the local
+store — `data/local_store.json` — which lives on the GitHub Actions runner. The
+runner is destroyed when the job ends, taking the ideas with it. The next stage
+starts from an empty store on a fresh runner.
+
+So the pipeline is not a loop. Each stage is an isolated run against a blank slate,
+and the human-approval gate at the centre of the design never receives a row.
+
+## Fix
+
+Set the `AIRTABLE_API_KEY` repository secret (`AIRTABLE_BASE_ID` is already
+`appvpMfpbNQDkUGeF` in `.env.example`), then run `python -m scripts.setup_airtable`
+once to provision the tables. Until state persists between runs, wiring the media
+providers above changes nothing — there is never a row for them to act on.
