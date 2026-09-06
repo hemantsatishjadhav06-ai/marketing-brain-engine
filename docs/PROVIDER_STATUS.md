@@ -1,3 +1,11 @@
+> **Update (2026-09-06).** The five per-stage cron workflows described below as
+> "green and inert" have been **removed**. They advanced no records because their
+> state (`data/local_store.json`) died with each GitHub-runner. The real content
+> pipeline lives in the sibling **marketing-brain** app on Railway, which produces
+> the creatives (verified live). A single `heartbeat` workflow now drives that app
+> via its `/api/cron` endpoint instead of running these stub stages locally. The
+> analysis below is kept for the record — it is the *why* behind that change.
+
 # Provider status — what is actually wired
 
 Verified by running the full pipeline on this repo (`make smoke`, `make test`, and a

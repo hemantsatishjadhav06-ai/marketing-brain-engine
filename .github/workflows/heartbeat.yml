@@ -1,0 +1,30 @@
+name: heartbeat
+# The five per-stage crons that used to live here ran green and produced nothing:
+# their state died with each runner (see docs/PROVIDER_STATUS.md). The real content
+# pipeline runs in the marketing-brain app on Railway. This workflow drives THAT —
+# it pings the app's /api/cron endpoint, which keeps the instance warm and triggers
+# the app's weekly per-brand refresh cycle. It fails loudly if the app is unreachable.
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # every 30 minutes
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Drive the app pipeline
+        env:
+          APP_URL: ${{ vars.APP_URL || 'https://marketing-brain-production-1f88.up.railway.app' }}
+          CRON_KEY: ${{ secrets.CRON_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${CRON_KEY}" ]; then
+            echo "::error::CRON_KEY secret is not set — add it in repo Settings → Secrets → Actions (same value as the app's CRON_KEY on Railway)."
+            exit 1
+          fi
+          code=$(curl -sS -o /tmp/resp.json -w '%{http_code}' --max-time 60 "${APP_URL}/api/cron?key=${CRON_KEY}")
+          echo "HTTP ${code}"; cat /tmp/resp.json; echo
+          test "${code}" = "200"
+          grep -q '"ok":true' /tmp/resp.json

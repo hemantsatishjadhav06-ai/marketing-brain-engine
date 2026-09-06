@@ -1,107 +1,117 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Marketing Brain — Content Engine</title>
+<title>Marketing Brain — Engine Status</title>
 <style>
-:root{--ac:#4f46e5;--ac2:#7c3aed;--bg:#f6f7fb;--card:#fff;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;
---gen:#d1fae5;--genT:#065f46;--rev:#fef3c7;--revT:#92400e;--app:#e0e7ff;--appT:#3730a3;--pub:#ccfbf1;--pubT:#115e59;--idea:#f1f5f9;--ideaT:#475569;}
+:root{--ac:#2f5fd0;--bg:#f6f7fb;--card:#fff;--ink:#0f172a;--mut:#5a6472;--line:#e2e8f0;
+  --ok:#2f9e6b;--okbg:#d1fae5;--warn:#c98a1e;--warnbg:#fef3c7;--bad:#b0454f;--badbg:#fde8ea;}
 @media(prefers-color-scheme:dark){:root{--bg:#0b1020;--card:#131a2e;--ink:#e7ecf5;--mut:#93a0b8;--line:#243049;
---gen:#0c3b2e;--genT:#6ee7b7;--rev:#3a2c08;--revT:#fcd34d;--app:#23244d;--appT:#c7d2fe;--pub:#06302c;--pubT:#5eead4;--idea:#1b2540;--ideaT:#9fb0cc;}}
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
-a{color:var(--ac);text-decoration:none}
-header{position:sticky;top:0;z-index:5;background:linear-gradient(90deg,var(--ac),var(--ac2));color:#fff;padding:14px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-header h1{font-size:18px;margin:0;font-weight:600}
-.badge{background:rgba(255,255,255,.18);padding:4px 10px;border-radius:999px;font-size:12px}
-.badge.ok::before{content:"● ";color:#86efac}
+  --okbg:#0c3b2e;--warnbg:#3a2c08;--badbg:#3a1418;}}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.55}
+a{color:var(--ac);text-decoration:none}a:hover{text-decoration:underline}
+header{background:var(--ac);color:#fff;padding:16px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{font-size:17px;margin:0;font-weight:600}
 header .sp{flex:1}
-header a{color:#fff;font-size:13px;background:rgba(255,255,255,.16);padding:6px 12px;border-radius:8px}
-.wrap{max-width:1200px;margin:0 auto;padding:20px}
-.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
-@media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
-.kpi .n{font-size:26px;font-weight:700}.kpi .l{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
-.cols{display:grid;grid-template-columns:2fr 1fr;gap:18px}@media(max-width:900px){.cols{grid-template-columns:1fr}}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
-.panel h2{margin:0 0 12px;font-size:15px}
-.board{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px}
-.lane{min-width:190px;flex:1}
-.lane h3{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin:0 0 8px;display:flex;justify-content:space-between}
-.lane.gate h3{color:var(--revT)}
-.card{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px}
-.card .t{font-size:13px;font-weight:600;margin-bottom:6px}
-.tags{display:flex;gap:5px;flex-wrap:wrap}
-.tag{font-size:10px;padding:2px 7px;border-radius:999px;background:var(--idea);color:var(--ideaT)}
-.tag.pf{background:var(--app);color:var(--appT)}
-.media i{font-size:11px;color:var(--mut);margin-right:6px}
-.pill{font-size:10px;padding:2px 8px;border-radius:999px;font-weight:600}
-.s-Idea{background:var(--idea);color:var(--ideaT)}.s-Generating{background:var(--gen);color:var(--genT)}
-.s-Needs.Review,.s-Needs{background:var(--rev);color:var(--revT)}.s-Approved{background:var(--app);color:var(--appT)}.s-Published{background:var(--pub);color:var(--pubT)}
-.q{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px}
-.q .t{font-size:13px;font-weight:600}.q .hook{color:var(--mut);font-size:12px;margin:4px 0}
-.q .cap{font-size:12px;margin:6px 0}
-.btns{display:flex;gap:8px;margin-top:8px}
-button{font:inherit;border:0;border-radius:8px;padding:7px 12px;cursor:pointer;font-size:12px;font-weight:600}
-.approve{background:var(--ac);color:#fff}.reject{background:transparent;color:var(--mut);border:1px solid var(--line)}
-.empty{color:var(--mut);font-size:13px;padding:10px 0}
-.agents{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:8px}
-.agent{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:8px 10px}
-.agent .an{font-size:12px;font-weight:600}.agent .as{font-size:10px;color:var(--mut);text-transform:uppercase}
-.note{color:var(--mut);font-size:12px;margin-top:16px;text-align:center}
-.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
-select{font:inherit;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+header a{color:#fff;font-size:13px;background:rgba(255,255,255,.18);padding:6px 12px;border-radius:8px}
+.wrap{max-width:1040px;margin:0 auto;padding:22px 20px 60px}
+.banner{background:var(--warnbg);border:1px solid var(--line);border-radius:10px;padding:12px 16px;
+  font-size:13.5px;color:var(--ink);margin-bottom:22px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+@media(max-width:720px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px}
+.kpi .l{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.kpi .n{font-size:20px;font-weight:700;margin-top:4px;display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--mut)}
+.dot.ok{background:var(--ok)}.dot.bad{background:var(--bad)}.dot.warn{background:var(--warn)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
+.panel h2{margin:0 0 4px;font-size:15px}
+.panel .sub{color:var(--mut);font-size:13px;margin:0 0 14px}
+.proj{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.proj .pt{font-weight:600;font-size:14px}
+.proj .pm{color:var(--mut);font-size:12.5px;margin-top:3px}
+.proj .pl{font-size:12.5px;margin-top:6px;display:inline-block}
+.empty{color:var(--mut);font-size:13px;padding:8px 0}
+.note{color:var(--mut);font-size:12px;margin-top:20px;text-align:center}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:var(--bg);
+  padding:1px 5px;border-radius:4px;border:1px solid var(--line)}
 </style></head>
 <body>
 <header>
-  <h1>🧠 Marketing Brain</h1>
-  <span class="badge ok">CI passing</span>
-  <span class="badge" id="gate">0 awaiting approval</span>
+  <h1>🧠 Marketing Brain — Engine Status</h1>
   <span class="sp"></span>
-  <a id="repo" href="#" target="_blank">View repo ↗</a>
+  <a href="https://marketing-brain-production-1f88.up.railway.app" target="_blank" rel="noopener">Open the app ↗</a>
 </header>
 <div class="wrap">
-  <div class="toolbar">
-    <strong>Content pipeline</strong>
-    <select id="pf" onchange="render()"><option value="">All platforms</option></select>
-    <span style="flex:1"></span>
-    <span class="note" style="margin:0">Sample run — human approval required before publish</span>
+  <div class="banner">
+    This page reads the <b>live application</b> directly — its health and its public project directory. It carries
+    no stored content of its own. The content pipeline (ideas, creatives, approvals) lives in the app behind a login;
+    open it above to work with it.
   </div>
-  <div class="kpis" id="kpis"></div>
-  <div class="cols">
-    <div class="panel"><h2>Pipeline board</h2><div class="board" id="board"></div></div>
-    <div class="panel"><h2>Approval queue — your call</h2><div id="queue"></div></div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="l">API</div><div class="n"><span class="dot" id="d-api"></span><span id="v-api">checking…</span></div></div>
+    <div class="kpi"><div class="l">Persistent DB</div><div class="n"><span class="dot" id="d-db"></span><span id="v-db">—</span></div></div>
+    <div class="kpi"><div class="l">Auth enforced</div><div class="n"><span class="dot" id="d-auth"></span><span id="v-auth">—</span></div></div>
+    <div class="kpi"><div class="l">Public projects</div><div class="n"><span class="dot" id="d-proj"></span><span id="v-proj">—</span></div></div>
   </div>
-  <div class="panel" style="margin-top:18px"><h2>The agent team</h2><div class="agents" id="agents"></div></div>
-  <div class="note">Front end for <span id="reponame"></span> · data embedded, no backend required · approvals here are a live demo.</div>
+
+  <div class="panel">
+    <h2>Project directory</h2>
+    <p class="sub">Live from <code>GET /api/projects</code> — the public list the app serves.</p>
+    <div id="projects"><div class="empty">Loading…</div></div>
+  </div>
+
+  <p class="note">
+    Refreshed on load from <code>marketing-brain-production-1f88.up.railway.app</code>.
+    Engine repository runs a heartbeat workflow that keeps this app awake and triggers its weekly refresh cycle.
+  </p>
 </div>
-<script>const DATA = {"brand": {"name": "Marketing Brain", "niche": "tennis gear", "accent": "#4f46e5"}, "repo": "https://github.com/hemantsatishjadhav06-ai/marketing-brain-engine", "agents": [{"name": "Orchestrator", "stage": "all"}, {"name": "Trend Scout", "stage": "discover"}, {"name": "Idea Miner", "stage": "discover"}, {"name": "SEO Analyst", "stage": "discover"}, {"name": "Strategist", "stage": "strategy"}, {"name": "Copywriter", "stage": "create"}, {"name": "Designer", "stage": "create"}, {"name": "Video Producer", "stage": "create"}, {"name": "Voice Artist", "stage": "create"}, {"name": "Editor", "stage": "create"}, {"name": "Brand Guardian", "stage": "create"}, {"name": "Scheduler", "stage": "schedule"}, {"name": "Publisher", "stage": "publish"}, {"name": "Community Manager", "stage": "engage"}, {"name": "Analyst", "stage": "analyze"}], "content": [{"id": "c1", "topic": "Why string tension actually matters", "platform": "X", "style": "Text", "status": "Idea", "perspective": "myth-busting"}, {"id": "c2", "topic": "5 racket grips ranked by control", "platform": "Instagram", "style": "Post", "status": "Idea", "perspective": "listicle"}, {"id": "c3", "topic": "The truth about 'pro' strings", "platform": "LinkedIn", "style": "Text", "status": "Idea", "perspective": "thought leadership"}, {"id": "c4", "topic": "Slow-mo: a clean one-handed backhand", "platform": "Instagram", "style": "Video", "status": "Generating", "perspective": "how-to"}, {"id": "c5", "topic": "Summer racket collection teaser", "platform": "Website", "style": "Text & Image", "status": "Generating", "perspective": "launch"}, {"id": "c6", "topic": "Babolat Pure Strike Team review", "platform": "Instagram", "style": "Video", "status": "Needs Review", "hook": "The control freak's racket just got lighter.", "caption": "Spin, control, and a crisp pocketed feel \u2014 here's why the Pure Strike Team belongs in advanced bags.", "hashtags": "#babolat #purestrike #tennisgear", "cta": "Shop the Pure Strike Team", "assets": ["image", "audio", "video"]}, {"id": "c7", "topic": "3 stringing mistakes killing your spin", "platform": "LinkedIn", "style": "AI Avatar", "status": "Needs Review", "hook": "You're losing spin before you even swing.", "caption": "Three stringing mistakes most players make \u2014 and the 30-second fix for each.", "hashtags": "#stringing #tennistips", "cta": "Book a re-string", "assets": ["image", "video"]}, {"id": "c8", "topic": "Poll: how often do you re-string?", "platform": "X", "style": "Text", "status": "Needs Review", "hook": "Be honest \u2014 when did you last re-string? \ud83c\udfbe", "caption": "Most club players wait 3x too long. Vote and see where you land.", "hashtags": "#tennis #poll", "cta": "Vote now", "assets": []}, {"id": "c9", "topic": "Behind the scenes: stringing a tour racket", "platform": "LinkedIn", "style": "Video", "status": "Approved", "hook": "60 seconds, 18 metres of string, 1 happy pro.", "caption": "Ever wondered what goes into a tour-ready racket? Here's the full process.", "hashtags": "#craftsmanship #tennis", "cta": "Follow for more", "assets": ["image", "video", "audio"]}, {"id": "c10", "topic": "New arrivals: 2026 summer collection", "platform": "Website", "style": "Text & Image", "status": "Published", "hook": "Your summer game starts here.", "caption": "Fresh frames, brighter strings, faster pickups. Explore the 2026 summer collection.", "hashtags": "#newarrivals", "cta": "Browse the collection", "assets": ["image"], "impressions": 4120, "likes": 287, "score": 7.4}, {"id": "c11", "topic": "How to choose your first serious racket", "platform": "Instagram", "style": "Post", "status": "Published", "hook": "Buying your first 'real' racket? Read this.", "caption": "Weight, balance, string pattern \u2014 the 3 things that actually matter, explained simply.", "hashtags": "#tennisgear #beginners", "cta": "Get the guide", "assets": ["image"], "impressions": 2980, "likes": 201, "score": 6.8}, {"id": "c12", "topic": "Babolat vs Wilson: control showdown", "platform": "X", "style": "Text", "status": "Published", "hook": "Babolat or Wilson for control? The data says\u2026", "caption": "We strung both at identical tension and measured. Here's what we found.", "hashtags": "#babolat #wilson #tennis", "cta": "See the breakdown", "assets": [], "impressions": 5310, "likes": 372, "score": 8.1}]};</script>
 <script>
-const LANES=[["Idea","Idea bank"],["Generating","Drafting"],["Needs Review","Needs review"],["Approved","Approved"],["Published","Published"]];
-let items = DATA.content.map(c=>Object.assign({},c));
-document.getElementById('repo').href=DATA.repo;
-document.getElementById('reponame').textContent=DATA.repo.split('/').slice(-2).join('/');
-(function(){const pf=document.getElementById('pf');[...new Set(DATA.content.map(c=>c.platform))].forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;pf.appendChild(o);});})();
-function f(){const p=document.getElementById('pf').value;return items.filter(c=>!p||c.platform===p);}
-function media(c){return (c.assets||[]).map(a=>'<i>'+({image:'🖼 image',video:'🎬 video',audio:'🔊 voice'}[a]||a)+'</i>').join('');}
-function card(c){return '<div class="card"><div class="t">'+c.topic+'</div><div class="tags"><span class="tag">'+c.platform+'</span><span class="tag">'+c.style+'</span>'+(c.score?'<span class="tag pf">score '+c.score+'</span>':'')+'</div>'+(c.assets&&c.assets.length?'<div class="media" style="margin-top:6px">'+media(c)+'</div>':'')+'</div>';}
-function render(){
-  const data=f();
-  const counts={};LANES.forEach(l=>counts[l[0]]=0);data.forEach(c=>counts[c.status]=(counts[c.status]||0)+1);
-  const pub=data.filter(c=>c.status==='Published');
-  const avg=pub.length?(pub.reduce((s,c)=>s+(c.score||0),0)/pub.length).toFixed(1):'–';
-  document.getElementById('kpis').innerHTML=[
-    ['Total pieces',data.length],['In production',(counts['Generating']||0)+(counts['Idea']||0)],
-    ['Awaiting approval',counts['Needs Review']||0],['Published',counts['Published']||0],['Avg score',avg]
-  ].map(k=>'<div class="kpi"><div class="n">'+k[1]+'</div><div class="l">'+k[0]+'</div></div>').join('');
-  document.getElementById('gate').textContent=(counts['Needs Review']||0)+' awaiting approval';
-  document.getElementById('board').innerHTML=LANES.map(l=>{
-    const cs=data.filter(c=>c.status===l[0]);
-    return '<div class="lane'+(l[0]==='Needs Review'?' gate':'')+'"><h3><span>'+l[1]+'</span><span>'+cs.length+'</span></h3>'+(cs.map(card).join('')||'<div class="empty">—</div>')+'</div>';
-  }).join('');
-  const q=data.filter(c=>c.status==='Needs Review');
-  document.getElementById('queue').innerHTML=q.length?q.map(c=>'<div class="q"><div class="t">'+c.topic+'</div><div class="hook">'+(c.hook||'')+'</div><div class="cap">'+(c.caption||'')+'</div><div class="tags"><span class="tag">'+c.platform+'</span><span class="tag">'+c.style+'</span></div><div class="btns"><button class="approve" onclick="act(\''+c.id+'\',\'Published\')">Approve &amp; publish</button><button class="reject" onclick="act(\''+c.id+'\',\'Rejected\')">Reject</button></div></div>').join(''):'<div class="empty">Nothing waiting — you\'re all caught up.</div>';
+const APP = "https://marketing-brain-production-1f88.up.railway.app";
+function set(id, dotId, text, cls){
+  const v = document.getElementById(id), d = document.getElementById(dotId);
+  if (v) v.textContent = text;
+  if (d){ d.className = "dot" + (cls ? " " + cls : ""); }
 }
-function act(id,to){const it=items.find(c=>c.id===id);if(it){it.status=to;if(to==='Published'&&!it.score)it.score=(6+Math.random()*3).toFixed(1);}render();}
-document.getElementById('agents').innerHTML=DATA.agents.map(a=>'<div class="agent"><div class="an">'+a.name+'</div><div class="as">'+a.stage+'</div></div>').join('');
-render();
+(async () => {
+  try {
+    const h = await fetch(APP + "/api/health", {cache:"no-store"}).then(r => r.json());
+    set("v-api", "d-api", h.ok ? "online" : "down", h.ok ? "ok" : "bad");
+    set("v-db", "d-db", h.persistent_db ? "Postgres" : "ephemeral", h.persistent_db ? "ok" : "warn");
+    // direct_access:false is the safe state — auth is enforced
+    set("v-auth", "d-auth", h.direct_access ? "OPEN — bypass on" : "enforced", h.direct_access ? "bad" : "ok");
+  } catch (e) {
+    set("v-api", "d-api", "unreachable", "bad");
+    set("v-db", "d-db", "—"); set("v-auth", "d-auth", "—");
+  }
+  const box = document.getElementById("projects");
+  try {
+    const data = await fetch(APP + "/api/projects", {cache:"no-store"}).then(r => r.json());
+    const list = Array.isArray(data) ? data : (data.projects || data.directory || []);
+    set("v-proj", "d-proj", String(list.length), list.length ? "ok" : "warn");
+    if (!list.length){ box.innerHTML = '<div class="empty">No public projects listed.</div>'; return; }
+    box.innerHTML = list.map(p => {
+      const name = p.name || p.title || p.project || "Project";
+      const meta = [p.area, p.corridor, p.status, p.price].filter(Boolean).join(" · ");
+      const url = p.url || p.website || p.link;
+      return '<div class="proj"><div class="pt"></div>'
+        + '<div class="pm"></div>'
+        + (url ? '<a class="pl" target="_blank" rel="noopener"></a>' : '')
+        + '</div>';
+    }).join("");
+    // fill text safely (avoid injecting untrusted strings as HTML)
+    [...box.querySelectorAll(".proj")].forEach((el, i) => {
+      const p = list[i];
+      el.querySelector(".pt").textContent = p.name || p.title || p.project || "Project";
+      el.querySelector(".pm").textContent = [p.area, p.corridor, p.status, p.price].filter(Boolean).join(" · ");
+      const a = el.querySelector(".pl"), url = p.url || p.website || p.link;
+      if (a && url){ a.href = url; a.textContent = url.replace(/^https?:\/\//, ""); }
+    });
+  } catch (e) {
+    set("v-proj", "d-proj", "—", "bad");
+    box.innerHTML = '<div class="empty">Could not load the project directory.</div>';
+  }
+})();
 </script>
 </body></html>
