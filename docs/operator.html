@@ -1,0 +1,1186 @@
+<title>Marketing Brain Operator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<style>
+:root{
+  --paper:#f0eee6; --panel:#faf9f5; --panel2:#f5f3ec; --ink:#1a1712; --muted:#6d6656; --faint:#948c7a;
+  --line:#e3ddd0; --line2:#d3ccbb; --accent:#284888; --accent-ink:#1c356a; --accent-soft:#e7ebf5;
+  --brand:#001848; --brand2:#14284a;
+  --ok:#2f7d57; --ok-bg:#e4efe7; --warn:#a8791a; --warn-bg:#f4ecd7; --risk:#a8443c; --risk-bg:#f4e2df;
+  --shadow-sm:0 1px 2px rgba(26,23,18,.05);
+  --shadow:0 2px 4px rgba(26,23,18,.04),0 12px 32px -14px rgba(26,23,18,.22);
+  --dsp:"Newsreader",Georgia,"Times New Roman",serif;
+  --ui:"Archivo","Helvetica Neue",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:14px;
+}
+:root:not([data-theme="light"]){ @media (prefers-color-scheme:dark){
+  --paper:#141310; --panel:#1e1c16; --panel2:#26231b; --ink:#efe9dc; --muted:#a89f8b; --faint:#726a58;
+  --line:#302c22; --line2:#403a2d; --accent:#8ea6dc; --accent-ink:#a9bdea; --accent-soft:#20283d;
+  --brand:#0a1f52; --brand2:#16305e;
+  --ok:#5cc48c; --ok-bg:#16281e; --warn:#d7a943; --warn-bg:#2c2410; --risk:#e07a70; --risk-bg:#2e1714;
+  --shadow:0 2px 4px rgba(0,0,0,.3),0 14px 36px -16px rgba(0,0,0,.7);
+}}
+:root[data-theme="dark"]{
+  --paper:#141310; --panel:#1e1c16; --panel2:#26231b; --ink:#efe9dc; --muted:#a89f8b; --faint:#726a58;
+  --line:#302c22; --line2:#403a2d; --accent:#8ea6dc; --accent-ink:#a9bdea; --accent-soft:#20283d;
+  --brand:#0a1f52; --brand2:#16305e;
+  --ok:#5cc48c; --ok-bg:#16281e; --warn:#d7a943; --warn-bg:#2c2410; --risk:#e07a70; --risk-bg:#2e1714;
+  --shadow:0 2px 4px rgba(0,0,0,.3),0 14px 36px -16px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+a{color:var(--accent-ink);text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+.nav{background:var(--panel);border-right:1px solid var(--line);padding:18px 14px;display:flex;flex-direction:column;gap:2px;
+  position:sticky;top:0;height:100vh;overflow-y:auto}
+.brandmark{display:flex;align-items:center;gap:10px;padding:4px 8px 16px}
+.brandmark .logo{width:30px;height:30px;border-radius:8px;background:var(--brand);color:#fff;display:grid;
+  place-items:center;font-family:var(--dsp);font-weight:500;font-size:17px;flex:none}
+.brandmark .nm{font-family:var(--ui);font-weight:700;font-size:15px;letter-spacing:-.01em;line-height:1.1}
+.brandmark .nm small{display:block;font-weight:500;font-size:11px;color:var(--faint);letter-spacing:.02em}
+
+/* brand switcher */
+.brandsel{border:1px solid var(--line2);border-radius:10px;background:var(--panel2);padding:9px 10px;margin:0 2px 6px;
+  display:flex;align-items:center;gap:9px;width:calc(100% - 4px);text-align:left}
+.brandsel:hover{border-color:var(--accent)}
+.brandsel .bl{width:26px;height:26px;border-radius:6px;background:var(--brand);color:#fff;display:grid;place-items:center;
+  font-family:var(--dsp);font-size:13px;flex:none}
+.brandsel .bt{min-width:0;flex:1}
+.brandsel .bt b{display:block;font-size:12.5px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brandsel .bt span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em}
+.brandsel .cv{color:var(--faint);flex:none}
+
+.navgroup{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);
+  padding:16px 10px 6px}
+.navitem{display:flex;align-items:center;gap:11px;padding:8px 10px;border-radius:9px;color:var(--muted);
+  font-weight:500;font-size:13.5px;position:relative;width:100%;text-align:left}
+.navitem svg{width:17px;height:17px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7}
+.navitem:hover{color:var(--ink)}
+.navitem.on{background:var(--accent-soft);color:var(--accent-ink);font-weight:600}
+.navitem.soon{color:var(--faint);cursor:default}
+.navitem.soon:hover{color:var(--faint)}
+.navitem .soontag{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--faint);border:1px solid var(--line2);border-radius:5px;padding:1px 5px}
+.navitem .cnt{margin-left:auto;font-family:var(--mono);font-size:11px;background:var(--accent);color:#fff;
+  border-radius:20px;padding:1px 7px;font-weight:600}
+.navfoot{margin-top:auto;padding:14px 10px 4px;font-family:var(--mono);font-size:10px;color:var(--faint);line-height:1.6}
+.navfoot b{color:var(--muted);font-weight:600}
+
+/* ---------- main ---------- */
+.main{display:flex;flex-direction:column;min-width:0}
+.top{display:flex;align-items:center;gap:14px;padding:14px 26px;border-bottom:1px solid var(--line);
+  background:color-mix(in srgb,var(--paper) 82%,transparent);backdrop-filter:blur(6px);position:sticky;top:0;z-index:4;flex-wrap:wrap}
+.top h1{font-family:var(--ui);font-size:16px;font-weight:700;margin:0;letter-spacing:-.01em}
+.top .crumb{font-family:var(--mono);font-size:11px;color:var(--faint)}
+.top .proto{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--warn);
+  background:var(--warn-bg);border:1px solid color-mix(in srgb,var(--warn) 30%,transparent);border-radius:6px;padding:3px 8px}
+.top .sp{flex:1}
+.mode{display:flex;align-items:center;gap:0;border:1px solid var(--line2);border-radius:9px;padding:2px;background:var(--panel)}
+.mode button{padding:5px 12px;border-radius:7px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.mode button.on{background:var(--accent);color:#fff}
+.mode .lbl{font-family:var(--mono);font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.1em;padding:0 10px 0 4px}
+.themebtn{border:1px solid var(--line2);border-radius:9px;width:34px;height:32px;display:grid;place-items:center;color:var(--muted)}
+.themebtn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+.content{padding:24px 26px 64px;max-width:1180px;width:100%;margin:0 auto}
+.screen{display:none}
+.screen.on{display:block;animation:fade .28s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen.on,.card{animation:none}}
+
+.head{display:flex;align-items:flex-end;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.head .h{font-family:var(--dsp);font-size:30px;font-weight:400;letter-spacing:-.015em;margin:0;line-height:1.05;text-wrap:balance}
+.head p{margin:6px 0 0;color:var(--muted);font-size:14px;max-width:62ch}
+.head .today{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--faint);text-align:right;line-height:1.5}
+
+/* ===== DASHBOARD ===== */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+@media(max-width:880px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px 16px}
+.kpi .l{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);
+  display:flex;align-items:center;gap:6px}
+.kpi .n{font-family:var(--ui);font-weight:800;font-size:30px;line-height:1;margin-top:10px;letter-spacing:-.02em}
+.kpi .d{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:7px}
+.kpi .d .up{color:var(--ok)}.kpi .d .dn{color:var(--risk)}
+.kpi.attn{border-color:color-mix(in srgb,var(--warn) 42%,var(--line));background:linear-gradient(180deg,var(--warn-bg),var(--panel) 60%)}
+.kpi.attn .n{color:var(--warn)}
+.kdot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.kdot.ok{background:var(--ok)}.kdot.warn{background:var(--warn)}
+
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:18px;align-items:start}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.section{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:18px 18px 8px;margin-bottom:18px}
+.section.tight{padding-bottom:18px}
+.sectionh{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.sectionh h2{font-family:var(--ui);font-size:14px;font-weight:700;margin:0;letter-spacing:-.01em}
+.sectionh .sub{font-family:var(--mono);font-size:10.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em}
+.sectionh .more{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent-ink)}
+
+/* pipeline strip */
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:16px 0 6px}
+.pstage{position:relative;padding:0 8px}
+.pstage:not(:last-child)::after{content:"";position:absolute;top:23px;right:-1px;width:2px;height:22px;background:var(--line)}
+.pstage .pn{font-family:var(--ui);font-weight:800;font-size:26px;line-height:1;letter-spacing:-.02em}
+.pstage .ps{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);margin-top:6px}
+.pstage .pbar{height:4px;border-radius:3px;background:var(--line);margin-top:10px;overflow:hidden}
+.pstage .pbar i{display:block;height:100%;background:var(--accent);border-radius:3px}
+.pstage.done .pn{color:var(--ok)}.pstage.done .pbar i{background:var(--ok)}
+.pstage.wait .pn{color:var(--warn)}.pstage.wait .pbar i{background:var(--warn)}
+
+/* attention list */
+.attnlist{display:flex;flex-direction:column}
+.arow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 2px;border-bottom:1px solid var(--line)}
+.arow:last-child{border-bottom:0}
+.arow .athumb{width:38px;height:48px;border-radius:6px;background:var(--brand);color:#c9d3ec;flex:none;display:grid;place-items:center;
+  font-family:var(--mono);font-size:8px;text-align:center;line-height:1.2;overflow:hidden}
+.arow .athumb img{width:100%;height:100%;object-fit:cover}
+.arow .at{font-weight:600;font-size:13.5px;letter-spacing:-.01em}
+.arow .am{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-top:3px;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.rec-pill{font-family:var(--mono);font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:3px 7px;border-radius:6px}
+.rec-pill.approve{background:var(--ok-bg);color:var(--ok)}
+.rec-pill.review{background:var(--warn-bg);color:var(--warn)}
+.rec-pill.risk{background:var(--risk-bg);color:var(--risk)}
+.arow .go{font-family:var(--ui);font-weight:600;font-size:12px;color:var(--accent-ink);border:1px solid var(--line2);
+  border-radius:8px;padding:6px 11px;white-space:nowrap}
+.arow .go:hover{border-color:var(--accent)}
+
+/* spark / activity */
+.spark{display:block;width:100%;height:96px;margin:8px 0 12px}
+.legend{display:flex;gap:14px;font-family:var(--mono);font-size:10.5px;color:var(--muted);flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+.feed{display:flex;flex-direction:column}
+.fev{display:grid;grid-template-columns:auto 1fr;gap:11px;padding:10px 2px;border-bottom:1px dotted var(--line)}
+.fev:last-child{border-bottom:0}
+.fev .fi{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;flex:none;background:var(--accent-soft);color:var(--accent-ink)}
+.fev .fi svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
+.fev .fi.ok{background:var(--ok-bg);color:var(--ok)}.fev .fi.warn{background:var(--warn-bg);color:var(--warn)}
+.fev .ft{font-size:13px;line-height:1.4}
+.fev .ft b{font-weight:600}
+.fev .fm{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:2px}
+
+/* health strip */
+.health{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.hpill{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:9px;padding:7px 11px;background:var(--panel2);
+  font-family:var(--mono);font-size:11px;color:var(--muted)}
+.hpill .roundel{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.hpill .roundel.warn{background:var(--warn)}
+.hpill b{color:var(--ink);font-weight:600}
+
+/* ===== COMPANY BRAIN ===== */
+.brainhero{display:grid;grid-template-columns:1fr 300px;gap:20px;background:var(--panel);border:1px solid var(--line2);
+  border-radius:17px;overflow:hidden;margin-bottom:20px}
+@media(max-width:820px){.brainhero{grid-template-columns:1fr}}
+.brainhero .bx{padding:24px 26px}
+.brainhero .eyebrow{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent-ink);margin-bottom:10px}
+.brainhero h2{font-family:var(--dsp);font-size:27px;font-weight:400;line-height:1.12;margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+.brainhero .pos{font-family:var(--dsp);font-size:16px;line-height:1.55;color:var(--ink);max-width:52ch}
+.brainhero .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.tag{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line2);border-radius:20px;padding:4px 11px;background:var(--panel2)}
+.tag b{color:var(--ink);font-weight:600}
+.visuallock{background:var(--brand);color:#fff;padding:22px;display:flex;flex-direction:column;gap:14px;justify-content:center}
+.visuallock .vl{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:#a9bce6}
+.locklogo{width:64px;height:64px;border-radius:14px;background:#fff;color:var(--brand);display:grid;place-items:center;
+  font-family:var(--dsp);font-size:34px;font-weight:500}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.sw{width:100%;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px;color:#cdd7ef}
+.sw i{width:22px;height:22px;border-radius:6px;border:1px solid rgba(255,255,255,.25);flex:none}
+
+.braincols{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+@media(max-width:820px){.braincols{grid-template-columns:1fr}}
+.bcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.bcard h3{font-family:var(--ui);font-size:13px;font-weight:700;margin:0 0 3px;display:flex;align-items:center;gap:8px}
+.bcard .bsub{font-family:var(--mono);font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:13px}
+.voice{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.voice .vh{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.voice .vh.do{color:var(--ok)}.voice .vh.dont{color:var(--risk)}
+.voice ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.voice li{font-size:12.5px;line-height:1.45;padding-left:16px;position:relative;color:var(--ink)}
+.voice li::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:2px}
+.voice .do li::before{background:var(--ok)}.voice .dont li::before{background:var(--risk)}
+.corridors{display:flex;flex-direction:column;gap:0}
+.crow{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:9px 0;border-bottom:1px dotted var(--line)}
+.crow:last-child{border-bottom:0}
+.crow .cn{font-weight:600;font-size:13px}
+.crow .cm{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.crow .cc{font-family:var(--mono);font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em}
+.factlist{display:flex;flex-direction:column;gap:0}
+.frow{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+.frow:last-child{border-bottom:0}
+.frow .fk{flex:none;margin-top:2px;color:var(--ok)}
+.frow .fk svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
+.frow.no .fk{color:var(--risk)}
+.frow .fx{font-size:12.5px;line-height:1.45}
+.frow .fx b{font-weight:600}
+.frow .fx code{font-family:var(--mono);font-size:11px;background:var(--panel2);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.aud{display:flex;flex-direction:column;gap:10px}
+.arow2{display:flex;gap:11px;align-items:baseline}
+.arow2 .ai{font-family:var(--dsp);font-size:15px;color:var(--accent-ink);flex:none;width:20px}
+.arow2 .atx b{font-weight:600;font-size:13px}
+.arow2 .atx span{display:block;font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-top:2px}
+
+/* ===== APPROVAL QUEUE ===== */
+.layout{display:grid;grid-template-columns:262px 1fr;gap:22px;align-items:start}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+.queue{display:flex;flex-direction:column;gap:10px}
+.qh{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);margin:2px 2px}
+.qcard{text-align:left;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 13px;
+  display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;transition:border-color .15s}
+.qcard:hover{border-color:var(--line2)}
+.qcard.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.qcard.decided{opacity:.5}
+.qthumb{width:44px;height:56px;border-radius:7px;object-fit:cover;background:var(--brand);flex:none;
+  display:grid;place-items:center;color:#cdd7ef;font-family:var(--mono);font-size:9px;overflow:hidden}
+.qthumb img{width:100%;height:100%;object-fit:cover}
+.qcard .qt{font-weight:600;font-size:12.5px;line-height:1.25;letter-spacing:-.01em}
+.qcard .qm{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.roundel{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.roundel.ok{background:var(--ok)}.roundel.warn{background:var(--warn)}.roundel.risk{background:var(--risk)}
+
+.card{background:var(--panel);border:1px solid var(--line2);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+.cardgrid{display:grid;grid-template-columns:minmax(280px,400px) 1fr}
+@media(max-width:820px){.cardgrid{grid-template-columns:1fr}}
+.preview{background:var(--brand);position:relative;padding:22px;display:flex;flex-direction:column;gap:14px}
+.preview .chip{align-self:flex-start;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:#c7d2ee;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:3px 8px}
+.preview img{width:100%;border-radius:10px;box-shadow:0 18px 40px -18px rgba(0,0,0,.7);display:block}
+.preview .cap{color:#c9d3ec;font-size:12.5px;line-height:1.55;font-family:var(--mono)}
+.preview .cap b{color:#fff;font-weight:600}
+.case{padding:24px 26px;display:flex;flex-direction:column;min-width:0}
+.rec{display:flex;align-items:flex-start;gap:13px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.rec .verdict{flex:none;font-family:var(--mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;
+  padding:5px 9px;border-radius:7px;margin-top:3px}
+.rec .verdict.approve{background:var(--ok-bg);color:var(--ok)}
+.rec .rt{font-family:var(--dsp);font-size:22px;font-weight:400;line-height:1.2;letter-spacing:-.01em}
+.rec .conf{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:5px}
+.rec .conf b{color:var(--muted);font-weight:600}
+.block{padding:16px 0;border-bottom:1px solid var(--line)}
+.block:last-of-type{border-bottom:0}
+.block .lbl{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--faint);margin-bottom:9px}
+.block .reason{font-family:var(--dsp);font-size:16px;line-height:1.5;color:var(--ink)}
+.facts{display:flex;flex-direction:column;gap:2px}
+.fact{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:baseline;padding:6px 0;border-bottom:1px dotted var(--line)}
+.fact:last-child{border-bottom:0}
+.fact .fl{font-size:12.5px;color:var(--muted)}
+.fact .fv{font-family:var(--mono);font-size:12px;text-align:right}
+.evidence{display:flex;flex-direction:column;gap:9px}
+.ev{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
+.ev .src{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent-ink);
+  background:var(--accent-soft);border-radius:5px;padding:3px 7px;white-space:nowrap;margin-top:1px}
+.ev .et{font-size:12.5px;line-height:1.45}
+.outcome{display:flex;gap:8px;flex-wrap:wrap}
+.metric{border:1px solid var(--line);border-radius:10px;padding:10px 13px;background:var(--panel2);flex:1;min-width:96px}
+.metric .mv{font-family:var(--ui);font-weight:800;font-size:19px;letter-spacing:-.01em}
+.metric .ml{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);margin-top:3px}
+.risknote{display:flex;gap:10px;align-items:flex-start;background:var(--warn-bg);border:1px solid color-mix(in srgb,var(--warn) 32%,transparent);
+  border-radius:10px;padding:11px 13px;margin-top:2px}
+.risknote svg{width:16px;height:16px;stroke:var(--warn);fill:none;stroke-width:1.9;flex:none;margin-top:1px}
+.risknote .rx{font-size:12px;line-height:1.45;color:var(--ink)}
+.risknote .rx b{color:var(--warn);font-weight:600}
+.actions{display:flex;gap:10px;padding-top:18px;flex-wrap:wrap}
+.btn{border-radius:10px;padding:11px 18px;font-weight:600;font-size:13.5px;display:flex;align-items:center;gap:8px;border:1px solid transparent}
+.btn kbd{font-family:var(--mono);font-size:10px;border:1px solid currentColor;border-radius:4px;padding:0 4px;opacity:.6}
+.btn.approve{background:var(--ok);color:#fff}
+.btn.approve:hover{filter:brightness(1.05)}
+.btn.changes{background:var(--panel);border-color:var(--line2);color:var(--ink)}
+.btn.changes:hover{border-color:var(--accent)}
+.btn.reject{background:var(--panel);border-color:var(--line2);color:var(--risk)}
+.btn.reject:hover{border-color:var(--risk)}
+.decided-banner{display:none;align-items:center;gap:10px;padding:12px 16px;border-radius:11px;font-size:13.5px;font-weight:600;margin-top:14px}
+.decided-banner.show{display:flex}
+.decided-banner.approve{background:var(--ok-bg);color:var(--ok)}
+.decided-banner.reject{background:var(--risk-bg);color:var(--risk)}
+.decided-banner.changes{background:var(--warn-bg);color:var(--warn)}
+
+.emptyq{text-align:center;padding:60px 20px;color:var(--muted)}
+.emptyq .eh{font-family:var(--dsp);font-size:22px;color:var(--ink);margin-bottom:6px}
+
+/* nav status tags */
+.soontag.live{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 40%,transparent)}
+.soontag.part{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 40%,transparent)}
+.soontag.plan{color:var(--faint)}
+
+/* status banner reused across engine screens */
+.statusbar{display:flex;align-items:center;gap:12px;border:1px solid var(--line2);border-radius:12px;padding:12px 16px;margin-bottom:22px;background:var(--panel)}
+.statusbar .badge{font-family:var(--mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:4px 9px;border-radius:7px;flex:none}
+.statusbar.live .badge{background:var(--ok-bg);color:var(--ok)}
+.statusbar.part .badge{background:var(--warn-bg);color:var(--warn)}
+.statusbar.plan .badge{background:var(--accent-soft);color:var(--accent-ink)}
+.statusbar .sx{font-size:12.5px;color:var(--muted);line-height:1.45}
+.statusbar .sx b{color:var(--ink);font-weight:600}
+
+/* content engine — kanban board */
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:start}
+@media(max-width:900px){.board{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.board{grid-template-columns:1fr}}
+.col{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:12px;min-height:120px}
+.colh{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);margin-bottom:12px}
+.colh .cc{margin-left:auto;background:var(--panel);border:1px solid var(--line2);border-radius:20px;padding:0 7px;color:var(--muted)}
+.tkt{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin-bottom:9px;box-shadow:var(--shadow-sm)}
+.tkt:last-child{margin-bottom:0}
+.tkt .tt{font-weight:600;font-size:12.5px;line-height:1.3;letter-spacing:-.01em}
+.tkt .tm{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tkt .fmtchip{color:var(--accent-ink);background:var(--accent-soft);border-radius:4px;padding:1px 5px}
+
+/* inbox */
+.inbox{display:grid;grid-template-columns:230px 1fr;gap:0;border:1px solid var(--line2);border-radius:15px;overflow:hidden;background:var(--panel)}
+@media(max-width:760px){.inbox{grid-template-columns:1fr}.inbox .thread{display:none}}
+.chanlist{border-right:1px solid var(--line);padding:10px}
+.chan{display:grid;grid-template-columns:auto 1fr auto;gap:9px;align-items:center;padding:10px 9px;border-radius:9px;cursor:default}
+.chan.on{background:var(--accent-soft)}
+.chan .ci{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;flex:none;font-size:12px;color:#fff}
+.chan .cn{font-size:12.5px;font-weight:600;letter-spacing:-.01em}
+.chan .cp{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-top:1px}
+.chan .cb{font-family:var(--mono);font-size:10px;background:var(--accent);color:#fff;border-radius:20px;padding:0 6px}
+.thread{padding:18px 20px;display:flex;flex-direction:column;gap:12px;background:var(--panel2)}
+.bub{max-width:80%;padding:10px 13px;border-radius:13px;font-size:13px;line-height:1.45}
+.bub.them{background:var(--panel);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:4px}
+.bub.us{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.bub .who{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.06em;opacity:.7;margin-bottom:4px}
+.draftbar{display:flex;gap:9px;align-items:center;background:var(--panel);border:1px dashed var(--line2);border-radius:11px;padding:11px 13px;margin-top:4px}
+.draftbar .dt{flex:1;font-size:12.5px;color:var(--muted)}.draftbar .dt b{color:var(--ink);font-weight:600}
+.draftbar .dbtn{font-family:var(--ui);font-weight:600;font-size:12px;color:#fff;background:var(--ok);border-radius:8px;padding:7px 13px}
+
+/* seo table */
+.stable{width:100%;border-collapse:collapse;font-size:13px}
+.stable th{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);text-align:left;padding:9px 12px;border-bottom:1px solid var(--line2)}
+.stable td{padding:11px 12px;border-bottom:1px solid var(--line)}
+.stable tr:last-child td{border-bottom:0}
+.stable .kw{font-weight:600;letter-spacing:-.01em}
+.stable .pos{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.rankchip{font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+.rankchip.win{background:var(--ok-bg);color:var(--ok)}
+.rankchip.mid{background:var(--warn-bg);color:var(--warn)}
+.rankchip.miss{background:var(--risk-bg);color:var(--risk)}
+.geo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+@media(max-width:760px){.geo{grid-template-columns:1fr}}
+
+/* ===== OVERVIEW / HOW IT WORKS ===== */
+.ovhero{background:var(--brand);color:#fff;border-radius:18px;padding:32px 34px;margin-bottom:24px;position:relative;overflow:hidden}
+.ovhero .eyebrow{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:#9fb4e6;margin-bottom:14px}
+.ovhero h2{font-family:var(--dsp);font-size:34px;font-weight:400;line-height:1.1;margin:0 0 12px;letter-spacing:-.015em;max-width:20ch;text-wrap:balance}
+.ovhero p{margin:0;color:#c9d3ec;font-size:15px;line-height:1.6;max-width:64ch}
+.ovhero .oneline{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;font-family:var(--mono);font-size:11px}
+.ovhero .oneline span{border:1px solid rgba(255,255,255,.22);border-radius:20px;padding:4px 11px;color:#dbe3f4}
+
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:6px 0 26px;counter-reset:step}
+@media(max-width:820px){.flow{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.flow{grid-template-columns:1fr}}
+.step{position:relative;padding:18px 16px}
+.step:not(:last-child)::after{content:"";position:absolute;top:34px;right:-1px;width:2px;background:var(--line2);height:calc(100% - 42px)}
+.step .sn{width:30px;height:30px;border-radius:9px;background:var(--accent);color:#fff;display:grid;place-items:center;font-family:var(--ui);font-weight:800;font-size:14px;margin-bottom:12px}
+.step h4{font-family:var(--ui);font-size:13.5px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em}
+.step p{margin:0;font-size:12px;line-height:1.5;color:var(--muted)}
+
+.funcgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+@media(max-width:820px){.funcgrid{grid-template-columns:1fr}}
+.fcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;position:relative}
+.fcard .fch{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.fcard .fic{width:32px;height:32px;border-radius:9px;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center;flex:none}
+.fcard .fic svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.7}
+.fcard h3{font-family:var(--ui);font-size:14.5px;font-weight:700;margin:0;letter-spacing:-.01em;line-height:1.15}
+.fcard h3 small{display:block;font-family:var(--mono);font-size:10px;font-weight:500;color:var(--faint);text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
+.fcard .sbadge{margin-left:auto;font-family:var(--mono);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:6px;flex:none}
+.sbadge.live{background:var(--ok-bg);color:var(--ok)}
+.sbadge.part{background:var(--warn-bg);color:var(--warn)}
+.sbadge.plan{background:var(--accent-soft);color:var(--accent-ink)}
+.fcard ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.fcard li{font-size:12.5px;line-height:1.45;padding-left:19px;position:relative;color:var(--ink)}
+.fcard li::before{content:"";position:absolute;left:2px;top:6px;width:7px;height:7px;border-radius:2px;background:var(--accent);transform:rotate(45deg)}
+.fcard li b{font-weight:600}
+.fcard.plan li::before{background:var(--faint)}
+.fcard.part li::before{background:var(--warn)}
+
+.stack{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px}
+@media(max-width:760px){.stack{grid-template-columns:1fr}}
+.stk{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:var(--panel)}
+.stk .sh{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);margin-bottom:9px}
+.stk ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.stk li{font-size:12.5px;display:flex;gap:8px;align-items:baseline}
+.stk li b{font-weight:600;font-family:var(--ui)}
+.stk li span{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-left:auto}
+
+.leg{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:16px}
+.leg span{display:flex;align-items:center;gap:7px}
+.leg i{width:22px;height:14px;border-radius:5px;display:inline-block}
+.leg i.live{background:var(--ok-bg);border:1px solid var(--ok)}
+.leg i.part{background:var(--warn-bg);border:1px solid var(--warn)}
+.leg i.plan{background:var(--accent-soft);border:1px solid var(--accent)}
+</style>
+
+<div class="app">
+  <!-- NAV -->
+  <aside class="nav">
+    <div class="brandmark">
+      <div class="logo">M</div>
+      <div class="nm">Marketing Brain<small>Operator console</small></div>
+    </div>
+    <button class="brandsel" id="brandsel">
+      <span class="bl">N</span>
+      <span class="bt"><b>Neopolis Infra LLP</b><span>West Hyderabad · switch brand</span></span>
+      <span class="cv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l4-4 4 4M8 15l4 4 4-4"/></svg></span>
+    </button>
+
+    <div class="navgroup">Workspace</div>
+    <button class="navitem on" data-screen="dashboard">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </button>
+    <button class="navitem" data-screen="queue">
+      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Approvals <span class="cnt" id="navcount">3</span>
+    </button>
+    <button class="navitem" data-screen="brain">
+      <svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 0-4 4 3 3 0 0 0-1 5.8V15a3 3 0 0 0 6 0"/><path d="M12 3a4 4 0 0 1 4 4 3 3 0 0 1 1 5.8V15a3 3 0 0 1-6 0"/></svg>
+      Company Brain
+    </button>
+
+    <div class="navgroup">Engines</div>
+    <button class="navitem" data-screen="content">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16v12H4z"/><path d="M8 20h8M12 16v4"/></svg>Content<span class="soontag live">live</span></button>
+    <button class="navitem" data-screen="inbox">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Inbox<span class="soontag plan">planned</span></button>
+    <button class="navitem" data-screen="seo">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 20V9"/></svg>SEO &amp; Reach<span class="soontag part">partial</span></button>
+
+    <div class="navgroup">Product</div>
+    <button class="navitem" data-screen="overview">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>How it works</button>
+
+    <div class="navfoot">
+      <b>App</b> · online · Postgres<br>
+      <b>Engine</b> · heartbeat 30&nbsp;min<br>
+      <span style="color:var(--warn)">Prototype — sample data</span>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="top">
+      <h1 id="topttl">Dashboard</h1>
+      <span class="crumb" id="crumb">Neopolis Infra LLP</span>
+      <span class="proto">Prototype</span>
+      <span class="sp"></span>
+      <div class="mode">
+        <span class="lbl">Publishing</span>
+        <button id="m-manual" class="on">Manual</button>
+        <button id="m-auto">Auto</button>
+      </div>
+      <button class="themebtn" id="themebtn" title="Toggle theme" aria-label="Toggle light or dark theme">
+        <svg id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
+        <svg id="moon" viewBox="0 0 24 24" style="display:none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+
+    <div class="content">
+
+      <!-- ============ DASHBOARD ============ -->
+      <section class="screen on" id="screen-dashboard">
+        <div class="head">
+          <div>
+            <h1 class="h">Good morning. Three creatives are waiting on you.</h1>
+            <p>Neopolis Infra LLP — landlord-share flats in West Hyderabad. Here is what the brain produced overnight and what needs a human decision before it ships.</p>
+          </div>
+          <div class="today">MON 07 SEP 2026<br>WEEK 37 · CYCLE 12</div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="l"><span class="kdot"></span>In pipeline</div>
+            <div class="n">7</div>
+            <div class="d">4 corridors · 2 formats</div>
+          </div>
+          <div class="kpi attn">
+            <div class="l"><span class="kdot warn"></span>Awaiting your approval</div>
+            <div class="n">3</div>
+            <div class="d">oldest queued 14h ago</div>
+          </div>
+          <div class="kpi">
+            <div class="l"><span class="kdot ok"></span>Published this week</div>
+            <div class="n">5</div>
+            <div class="d"><span class="up">▲ 2</span> vs last week</div>
+          </div>
+          <div class="kpi">
+            <div class="l"><span class="kdot ok"></span>Brand-lock pass rate</div>
+            <div class="n">96%</div>
+            <div class="d">1 flagged for logo drift</div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <div class="section tight">
+              <div class="sectionh">
+                <h2>This week's pipeline</h2>
+                <span class="sub">idea → creative → approval → live</span>
+              </div>
+              <div class="pipe">
+                <div class="pstage done"><div class="pn">12</div><div class="ps">Ideas drafted</div><div class="pbar"><i style="width:100%"></i></div></div>
+                <div class="pstage done"><div class="pn">7</div><div class="ps">Creatives rendered</div><div class="pbar"><i style="width:82%"></i></div></div>
+                <div class="pstage wait"><div class="pn">3</div><div class="ps">Awaiting approval</div><div class="pbar"><i style="width:43%"></i></div></div>
+                <div class="pstage"><div class="pn">5</div><div class="ps">Published</div><div class="pbar"><i style="width:60%"></i></div></div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="sectionh">
+                <h2>Needs your attention</h2>
+                <span class="sub">3 items</span>
+                <button class="more" data-jump="queue">Open queue →</button>
+              </div>
+              <div class="attnlist">
+                <div class="arow">
+                  <div class="athumb"><img id="attn-render" alt="Neopolis creative"></div>
+                  <div>
+                    <div class="at">Kokapet landlord-share 3 BHK — launch post</div>
+                    <div class="am"><span>4:5 · Instagram</span><span class="roundel ok"></span><span>brand-lock passed</span></div>
+                  </div>
+                  <span class="rec-pill approve">Recommend approve</span>
+                </div>
+                <div class="arow">
+                  <div class="athumb">FIN<br>DIST</div>
+                  <div>
+                    <div class="at">Financial District — price-per-sqft explainer</div>
+                    <div class="am"><span>carousel · 5 slides</span><span class="roundel warn"></span><span>one price claim to verify</span></div>
+                  </div>
+                  <span class="rec-pill review">Review first</span>
+                </div>
+                <div class="arow">
+                  <div class="athumb">NAR<br>SINGI</div>
+                  <div>
+                    <div class="at">Narsingi vs Kokapet — corridor comparison reel</div>
+                    <div class="am"><span>reel · 22s</span><span class="roundel ok"></span><span>caption within voice</span></div>
+                  </div>
+                  <span class="rec-pill approve">Recommend approve</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <div class="sectionh"><h2>Weekly output</h2><span class="sub">last 8 weeks</span></div>
+              <svg class="spark" id="spark" viewBox="0 0 320 96" preserveAspectRatio="none" role="img" aria-label="Weekly published vs approved output over eight weeks"></svg>
+              <div class="legend">
+                <span><i style="background:var(--accent)"></i>Rendered</span>
+                <span><i style="background:var(--ok)"></i>Published</span>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="sectionh"><h2>System health</h2><span class="sub">live</span></div>
+              <div class="health">
+                <div class="hpill"><span class="roundel"></span><b>App</b> online</div>
+                <div class="hpill"><span class="roundel"></span><b>DB</b> Postgres</div>
+                <div class="hpill"><span class="roundel"></span><b>Auth</b> enforced</div>
+                <div class="hpill"><span class="roundel warn"></span><b>Engine</b> heartbeat</div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="sectionh"><h2>Recent activity</h2><span class="sub">today</span></div>
+              <div class="feed">
+                <div class="fev"><div class="fi ok"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+                  <div><div class="ft">You approved <b>Tellapur 2 BHK — rental yield post</b></div><div class="fm">08:42 · published to Instagram</div></div></div>
+                <div class="fev"><div class="fi"><svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg></div>
+                  <div><div class="ft">Brain rendered <b>3 creatives</b> for the weekly cycle</div><div class="fm">06:15 · fal.ai · 4:5 brand-locked</div></div></div>
+                <div class="fev"><div class="fi warn"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6A2 2 0 0 0 22 18L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div>
+                  <div><div class="ft">Flagged a <b>price claim</b> for verification</div><div class="fm">06:15 · Financial District carousel</div></div></div>
+                <div class="fev"><div class="fi"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.6"/><path d="M21 3v6h-6"/></svg></div>
+                  <div><div class="ft">Engine heartbeat kept the app warm</div><div class="fm">05:30 · GET /api/cron · 200 OK</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ COMPANY BRAIN ============ -->
+      <section class="screen" id="screen-brain">
+        <div class="head">
+          <div>
+            <h1 class="h">Company Brain</h1>
+            <p>Every brand gets its own isolated brain — the single source of truth the agents read before they write, render, or reply. Nothing ships that contradicts what is stored here.</p>
+          </div>
+        </div>
+
+        <div class="brainhero">
+          <div class="bx">
+            <div class="eyebrow">Identity · locked</div>
+            <h2>Neopolis Infra LLP</h2>
+            <p class="pos">Landlord-share (landowner-share) apartments across West Hyderabad, sold direct from landowners at 8–14% below resale — no brokers. Premium and NRI buyers, ₹0.9–3.5 Cr.</p>
+            <div class="meta">
+              <span class="tag"><b>Site</b> neopolisinfra.com</span>
+              <span class="tag"><b>Contact</b> +91 95336 86567</span>
+              <span class="tag"><b>Blog</b> 10 SEO posts</span>
+            </div>
+          </div>
+          <div class="visuallock">
+            <div class="vl">Visual lock</div>
+            <div class="locklogo">N</div>
+            <div class="swatches">
+              <div class="sw"><i style="background:#001848"></i>Brand navy · #001848</div>
+              <div class="sw"><i style="background:#c98a3c"></i>Accent ochre · #C98A3C</div>
+              <div class="sw"><i style="background:#f0eee6"></i>Paper · #F0EEE6</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="braincols">
+          <div class="bcard">
+            <h3>Voice &amp; guardrails</h3>
+            <div class="bsub">how the brand speaks — and what it never says</div>
+            <div class="voice">
+              <div class="do">
+                <div class="vh do"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>Always</div>
+                <ul>
+                  <li>Name the exact corridor — Kokapet, Narsingi, Financial District.</li>
+                  <li>Explain landlord-share plainly; treat safety as the buyer's first question.</li>
+                  <li>Use price <b>ranges</b> and "verify with the Neopolis team".</li>
+                  <li>Speak to NRI buyers on legal comfort and remote purchase.</li>
+                </ul>
+              </div>
+              <div class="dont">
+                <div class="vh dont"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg>Never</div>
+                <ul>
+                  <li>Invent exact prices, legal guarantees, or project claims.</li>
+                  <li>Credit a "<b>Reputed developer</b>" or any unnamed builder.</li>
+                  <li>Confuse the firm with "Neopolis", the HMDA layout in Kokapet.</li>
+                  <li>AI clichés — "delve", "landscape", "game-changer".</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="bcard">
+            <h3>Fact rules</h3>
+            <div class="bsub">hard constraints enforced on every generation</div>
+            <div class="factlist">
+              <div class="frow"><span class="fk"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>
+                <div class="fx"><b>Landlord-share, not builder stock.</b> Flats come to buyers as the landowner's share of a joint development.</div></div>
+              <div class="frow"><span class="fk"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>
+                <div class="fx"><b>West Hyderabad only.</b> Kokapet, Narsingi, Financial District, Manchirevula, Tellapur, Kollur.</div></div>
+              <div class="frow no"><span class="fk"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
+                <div class="fx">If no developer is truly named, print <b>no</b> developer credit — never <code>by Reputed developer</code>.</div></div>
+              <div class="frow no"><span class="fk"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
+                <div class="fx">No fabricated prices. Ranges only, always paired with a verify-with-team line.</div></div>
+            </div>
+          </div>
+
+          <div class="bcard">
+            <h3>Corridors</h3>
+            <div class="bsub">where Neopolis operates · sample directory</div>
+            <div class="corridors">
+              <div class="crow"><span class="cn">Kokapet</span><span class="cm">₹9.5–13k / sqft</span><span class="cc">flagship</span></div>
+              <div class="crow"><span class="cn">Financial District</span><span class="cm">₹8.5–12k / sqft</span><span class="cc">active</span></div>
+              <div class="crow"><span class="cn">Narsingi</span><span class="cm">₹7.5–10k / sqft</span><span class="cc">active</span></div>
+              <div class="crow"><span class="cn">Manchirevula</span><span class="cm">₹6.5–8.5k / sqft</span><span class="cc">growth</span></div>
+              <div class="crow"><span class="cn">Tellapur</span><span class="cm">₹6–8k / sqft</span><span class="cc">growth</span></div>
+              <div class="crow"><span class="cn">Kollur</span><span class="cm">₹5.5–7.5k / sqft</span><span class="cc">value</span></div>
+            </div>
+          </div>
+
+          <div class="bcard">
+            <h3>Who we sell to</h3>
+            <div class="bsub">audiences the brain writes for</div>
+            <div class="aud">
+              <div class="arow2"><span class="ai">1</span><div class="atx"><b>NRI investors</b><span>Gulf &amp; US buyers · legal comfort, remote purchase, yield</span></div></div>
+              <div class="arow2"><span class="ai">2</span><div class="atx"><b>End-use upgraders</b><span>Hyderabad families moving to 3–4 BHK in the west</span></div></div>
+              <div class="arow2"><span class="ai">3</span><div class="atx"><b>First-time premium buyers</b><span>₹0.9–1.5 Cr · price-sensitive, safety-first</span></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ APPROVAL QUEUE ============ -->
+      <section class="screen" id="screen-queue">
+        <div class="head">
+          <div>
+            <h1 class="h">Approval queue</h1>
+            <p>Nothing here is live yet. Every creative arrives with the brain's recommendation and the evidence behind it — you make the call.</p>
+          </div>
+          <div class="today" id="qcounts">3 WAITING</div>
+        </div>
+
+        <div class="layout">
+          <div class="queue" id="queuelist">
+            <div class="qh">In queue</div>
+          </div>
+
+          <div id="casewrap">
+            <!-- case injected -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ CONTENT ENGINE ============ -->
+      <section class="screen" id="screen-content">
+        <div class="head">
+          <div>
+            <h1 class="h">Content engine</h1>
+            <p>The brain turns a corridor and a goal into a finished, brand-locked creative — idea, copy, and image — then hands it to you for approval. This board is where a week's work moves left to right.</p>
+          </div>
+        </div>
+        <div class="statusbar live">
+          <span class="badge">Live</span>
+          <span class="sx"><b>Working today.</b> Ideas → captions → 4:5 image render via fal.ai with the Neopolis brand lock (navy + logo). Reels and carousels are in design; every render still passes through the approval queue before it ships.</span>
+        </div>
+        <div class="board">
+          <div class="col">
+            <div class="colh">Ideas <span class="cc">4</span></div>
+            <div class="tkt"><div class="tt">Kollur value 2 BHK — under ₹80L</div><div class="tm"><span class="fmtchip">post</span><span>Kollur</span></div></div>
+            <div class="tkt"><div class="tt">Is landlord-share safe? — myth vs fact</div><div class="tm"><span class="fmtchip">carousel</span><span>education</span></div></div>
+            <div class="tkt"><div class="tt">Tellapur handover timelines</div><div class="tm"><span class="fmtchip">post</span><span>Tellapur</span></div></div>
+            <div class="tkt"><div class="tt">NRI title-check checklist</div><div class="tm"><span class="fmtchip">carousel</span><span>NRI</span></div></div>
+          </div>
+          <div class="col">
+            <div class="colh">Rendering <span class="cc">2</span></div>
+            <div class="tkt"><div class="tt">Manchirevula 3 BHK — corridor spotlight</div><div class="tm"><span class="fmtchip">4:5</span><span class="roundel"></span><span>fal.ai queued</span></div></div>
+            <div class="tkt"><div class="tt">Kokapet vs Financial District</div><div class="tm"><span class="fmtchip">carousel</span><span class="roundel"></span><span>drafting copy</span></div></div>
+          </div>
+          <div class="col">
+            <div class="colh">Awaiting approval <span class="cc">3</span></div>
+            <div class="tkt"><div class="tt">Kokapet landlord-share 3 BHK — launch</div><div class="tm"><span class="fmtchip">4:5</span><span class="roundel ok"></span><span>recommend approve</span></div></div>
+            <div class="tkt"><div class="tt">Financial District — ₹/sqft explainer</div><div class="tm"><span class="fmtchip">carousel</span><span class="roundel warn"></span><span>review first</span></div></div>
+            <div class="tkt"><div class="tt">Narsingi vs Kokapet — comparison</div><div class="tm"><span class="fmtchip">reel</span><span class="roundel ok"></span><span>recommend approve</span></div></div>
+          </div>
+          <div class="col">
+            <div class="colh">Published <span class="cc">5</span></div>
+            <div class="tkt"><div class="tt">Tellapur 2 BHK — rental yield</div><div class="tm"><span class="fmtchip">post</span><span class="roundel ok"></span><span>live · Instagram</span></div></div>
+            <div class="tkt"><div class="tt">West Hyderabad price map 2026</div><div class="tm"><span class="fmtchip">carousel</span><span class="roundel ok"></span><span>live</span></div></div>
+            <div class="tkt"><div class="tt">Why buy direct from landowners</div><div class="tm"><span class="fmtchip">post</span><span class="roundel ok"></span><span>live</span></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ INBOX ============ -->
+      <section class="screen" id="screen-inbox">
+        <div class="head">
+          <div>
+            <h1 class="h">Unified inbox</h1>
+            <p>One place for every conversation — WhatsApp, Instagram, Facebook, email and website chat — where the brain drafts a reply in the brand's voice and you send it with one tap.</p>
+          </div>
+        </div>
+        <div class="statusbar plan">
+          <span class="badge">Planned</span>
+          <span class="sx"><b>Designed, not yet built.</b> This is the target for the Communication engine (§9). WhatsApp lands first, then Instagram / Facebook DMs and website chat. Shown here as the intended layout — no live messages are connected.</span>
+        </div>
+        <div class="inbox">
+          <div class="chanlist">
+            <div class="chan on"><span class="ci" style="background:#25d366">W</span><span><span class="cn">WhatsApp</span><span class="cp">Priya · Kokapet</span></span><span class="cb">2</span></div>
+            <div class="chan"><span class="ci" style="background:#e1306c">IG</span><span><span class="cn">Instagram DM</span><span class="cp">@rahul_nri</span></span><span class="cb">1</span></div>
+            <div class="chan"><span class="ci" style="background:#1877f2">f</span><span><span class="cn">Facebook</span><span class="cp">Anita M.</span></span></div>
+            <div class="chan"><span class="ci" style="background:#c98a3c">@</span><span><span class="cn">Email</span><span class="cp">sales@neopolis</span></span></div>
+            <div class="chan"><span class="ci" style="background:#284888">◍</span><span><span class="cn">Website chat</span><span class="cp">visitor · Narsingi</span></span></div>
+          </div>
+          <div class="thread">
+            <div class="bub them"><div class="who">Priya · WhatsApp</div>Hi, is the Kokapet 3 BHK still available? And is landlord-share safe for an NRI buyer?</div>
+            <div class="bub them">What's the price range?</div>
+            <div class="draftbar">
+              <div class="dt"><b>Brain drafted a reply</b> — in Neopolis voice, price as a range, safety addressed, ends with "verify with the team". Awaiting your send.</div>
+              <span class="dbtn">Review &amp; send</span>
+            </div>
+            <div class="bub us"><div class="who">Draft · you send</div>Yes, the Kokapet 3 BHK is available. Landlord-share is simply the landowner's share of a joint development — fully registerable, and popular with NRI buyers for exactly that reason. Ballpark is ₹9.5–13k/sqft depending on the tower; the team can confirm the exact figure for your unit. Shall I have them call you?</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SEO & REACH ============ -->
+      <section class="screen" id="screen-seo">
+        <div class="head">
+          <div>
+            <h1 class="h">SEO &amp; reach</h1>
+            <p>Where the brand shows up when buyers ask — in Google and, increasingly, in AI answers. The brain tracks the queries that matter, writes to close the gaps, and measures whether it worked.</p>
+          </div>
+        </div>
+        <div class="statusbar part">
+          <span class="badge">Partial</span>
+          <span class="sx"><b>Keyword tracking + GEO checks run today</b> via scheduled tasks (the blog has 10 live SEO posts). Publishing schema/content straight to the site and automated Search Console ingestion are planned. Figures below are illustrative.</span>
+        </div>
+        <div class="section tight">
+          <div class="sectionh"><h2>Buyer queries</h2><span class="sub">where neopolisinfra.com ranks</span></div>
+          <div style="overflow-x:auto">
+            <table class="stable">
+              <thead><tr><th>Query</th><th>Corridor</th><th>Position</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="kw">landlord share flats in Hyderabad</td><td>brand</td><td class="pos">3</td><td><span class="rankchip win">ranking</span></td></tr>
+                <tr><td class="kw">flats in Kokapet for sale</td><td>Kokapet</td><td class="pos">12</td><td><span class="rankchip mid">page 2</span></td></tr>
+                <tr><td class="kw">Kokapet vs Narsingi</td><td>compare</td><td class="pos">—</td><td><span class="rankchip miss">gap</span></td></tr>
+                <tr><td class="kw">is landlord share flat safe</td><td>education</td><td class="pos">5</td><td><span class="rankchip win">ranking</span></td></tr>
+                <tr><td class="kw">NRI buy flat Hyderabad</td><td>NRI</td><td class="pos">—</td><td><span class="rankchip miss">gap</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="geo">
+          <div class="section tight">
+            <div class="sectionh"><h2>AI answer visibility</h2><span class="sub">GEO · monthly</span></div>
+            <div class="health" style="margin-top:14px">
+              <div class="hpill"><span class="roundel"></span><b>ChatGPT</b> cited · 2 queries</div>
+              <div class="hpill"><span class="roundel warn"></span><b>Perplexity</b> partial</div>
+              <div class="hpill"><span class="roundel warn"></span><b>Gemini</b> not yet</div>
+            </div>
+            <p style="font-size:12.5px;color:var(--muted);margin:14px 2px 4px;line-height:1.5">robots.txt allows GPTBot &amp; PerplexityBot; schema and sitemap are serving. A monthly scheduled task re-checks visibility and files a report.</p>
+          </div>
+          <div class="section tight">
+            <div class="sectionh"><h2>Next actions</h2><span class="sub">brain recommends</span></div>
+            <div class="attnlist" style="margin-top:6px">
+              <div class="arow" style="grid-template-columns:1fr auto"><div><div class="at">Write "Kokapet vs Narsingi" comparison</div><div class="am"><span>unclaimed query · high intent</span></div></div><span class="rec-pill approve">high value</span></div>
+              <div class="arow" style="grid-template-columns:1fr auto"><div><div class="at">NRI buying guide — title &amp; legal</div><div class="am"><span>gap · NRI audience</span></div></div><span class="rec-pill review">medium</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ OVERVIEW / HOW IT WORKS ============ -->
+      <section class="screen" id="screen-overview">
+        <div class="ovhero">
+          <div class="eyebrow">The whole product · in one page</div>
+          <h2>One brain per brand. Agents do the work. A human always says yes.</h2>
+          <p>Marketing Brain gives each business its own AI marketing team — a shared source of truth, specialist agents that produce real content, and a human approval gate so nothing goes out that the brand wouldn't say itself. Below is everything it does, and how the pieces fit.</p>
+          <div class="oneline"><span>Company Brain</span><span>→ Orchestrator</span><span>→ Specialist agents</span><span>→ Human approval</span><span>→ Publish</span><span>→ Learn</span></div>
+        </div>
+
+        <div class="head"><div><h1 class="h">How it works</h1><p>Six stages, every time. The brand's knowledge goes in one end; approved, on-brand marketing comes out the other — and what worked feeds back in.</p></div></div>
+        <div class="flow">
+          <div class="step"><div class="sn">1</div><h4>Company Brain</h4><p>Each brand's identity, voice, fact rules and visual lock — the single source of truth every agent reads first.</p></div>
+          <div class="step"><div class="sn">2</div><h4>Orchestrator plans</h4><p>Turns a goal ("this week's posts") into a plan: which corridor, which format, which agent, and whether it needs approval.</p></div>
+          <div class="step"><div class="sn">3</div><h4>Agents produce</h4><p>Specialist agents write the copy and render the brand-locked creative, each returning a structured, checkable result.</p></div>
+          <div class="step"><div class="sn">4</div><h4>You approve</h4><p>Every creative arrives with a recommendation, the evidence, expected outcome and risk. You approve, request changes, or reject.</p></div>
+          <div class="step"><div class="sn">5</div><h4>Publish &amp; learn</h4><p>Approved work ships to the channel, then results flow back so the brain gets better at what to make next.</p></div>
+        </div>
+
+        <div class="head" style="margin-top:8px"><div><h1 class="h">Everything it does</h1><p>Grouped by engine. Each point is a real capability — badged by whether it's live today, partly built, or planned on the roadmap.</p></div></div>
+        <div class="funcgrid">
+
+          <div class="fcard">
+            <div class="fch"><span class="fic"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 0-4 4 3 3 0 0 0-1 5.8V15a3 3 0 0 0 6 0"/><path d="M12 3a4 4 0 0 1 4 4 3 3 0 0 1 1 5.8V15a3 3 0 0 1-6 0"/></svg></span>
+              <h3>Company Brain<small>the source of truth</small></h3><span class="sbadge live">Live</span></div>
+            <ul>
+              <li><b>Isolated per brand</b> — one brain per business, nothing leaks between customers.</li>
+              <li><b>Voice guardrails</b> — always/never rules the agents must follow.</li>
+              <li><b>Fact rules</b> — hard constraints (ranges not prices; never credit an unnamed developer).</li>
+              <li><b>Visual lock</b> — brand navy + logo composited onto every render.</li>
+              <li><b>Corridors &amp; audiences</b> — where the brand sells and who it writes for.</li>
+            </ul>
+          </div>
+
+          <div class="fcard">
+            <div class="fch"><span class="fic"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H4z"/><path d="M8 20h8M12 16v4"/></svg></span>
+              <h3>Content engine<small>ideas → creatives</small></h3><span class="sbadge live">Live</span></div>
+            <ul>
+              <li><b>Idea generation</b> — corridor- and intent-led topics, no repeats.</li>
+              <li><b>On-brand copy</b> — captions and carousels written in the brand voice.</li>
+              <li><b>Image render</b> — 4:5 creatives via fal.ai, brand-locked to navy + logo.</li>
+              <li><b>Formats</b> — posts today; carousels and reels in design.</li>
+              <li><b>Weekly cycle</b> — a scheduled cadence keeps the pipeline full.</li>
+            </ul>
+          </div>
+
+          <div class="fcard">
+            <div class="fch"><span class="fic"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+              <h3>Approval &amp; control<small>human-in-the-loop · §15</small></h3><span class="sbadge live">Live</span></div>
+            <ul>
+              <li><b>Recommendation</b> — approve / review, with a confidence read.</li>
+              <li><b>Evidence with sources</b> — every claim traced to the brain.</li>
+              <li><b>Expected outcome + risk</b> — what to expect, what to check first.</li>
+              <li><b>One-tap decision</b> — approve, request changes, or reject (keys A/E/R).</li>
+              <li><b>Auto / Manual mode</b> — you choose how much ships without a tap.</li>
+            </ul>
+          </div>
+
+          <div class="fcard part">
+            <div class="fch"><span class="fic"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 20V9"/></svg></span>
+              <h3>SEO &amp; reach<small>search + AI answers · §13</small></h3><span class="sbadge part">Partial</span></div>
+            <ul>
+              <li><b>Keyword tracking</b> — buyer queries and where the brand ranks.</li>
+              <li><b>GEO visibility</b> — whether ChatGPT / Perplexity cite the brand.</li>
+              <li><b>Gap → content</b> — turns unclaimed queries into a post to write.</li>
+              <li><b>Publish to site</b> — schema/content to the website <i>(planned)</i>.</li>
+              <li><b>Search Console ingest</b> — automated rank data <i>(planned)</i>.</li>
+            </ul>
+          </div>
+
+          <div class="fcard plan">
+            <div class="fch"><span class="fic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+              <h3>Communication inbox<small>every channel · §9</small></h3><span class="sbadge plan">Planned</span></div>
+            <ul>
+              <li><b>Unified inbox</b> — WhatsApp, Instagram, Facebook, email, website chat.</li>
+              <li><b>Drafted replies</b> — in brand voice, you send with one tap.</li>
+              <li><b>Approval on sensitive replies</b> — nothing risky auto-sends.</li>
+              <li><b>Contact &amp; conversation history</b> — one thread per person.</li>
+            </ul>
+          </div>
+
+          <div class="fcard plan">
+            <div class="fch"><span class="fic"><svg viewBox="0 0 24 24"><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg></span>
+              <h3>Email &amp; outbound<small>nurture + acquisition · §10</small></h3><span class="sbadge plan">Planned</span></div>
+            <ul>
+              <li><b>Sequences</b> — nurture opted-in leads to a call.</li>
+              <li><b>Prospect discovery</b> — find and enrich ICP-fit buyers.</li>
+              <li><b>Personalization</b> — tailored to corridor and buyer type.</li>
+              <li><b>Consent-first</b> — DPDP-aware; warm contacts before cold.</li>
+            </ul>
+          </div>
+
+          <div class="fcard plan">
+            <div class="fch"><span class="fic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></span>
+              <h3>Ads<small>paid amplification · §12</small></h3><span class="sbadge plan">Planned</span></div>
+            <ul>
+              <li><b>Meta &amp; Google campaigns</b> — from an approved creative.</li>
+              <li><b>Audience targeting</b> — corridor, intent, lookalikes.</li>
+              <li><b>Budget guardrails</b> — spend caps, human sign-off.</li>
+              <li><b>Insights read-back</b> — spend and results into the learning loop.</li>
+            </ul>
+          </div>
+
+          <div class="fcard plan">
+            <div class="fch"><span class="fic"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.2-8.6"/><path d="M21 3v6h-6"/></svg></span>
+              <h3>Learning loop<small>closes the circle · §14</small></h3><span class="sbadge plan">Planned</span></div>
+            <ul>
+              <li><b>Metrics ingestion</b> — reach, saves, replies per post.</li>
+              <li><b>Attribution</b> — which content drove enquiries.</li>
+              <li><b>Feeds the brain</b> — what worked shapes the next cycle.</li>
+              <li><b>Per-brand reporting</b> — a weekly read on what's landing.</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="leg">
+          <span><i class="live"></i><b>Live</b> — working today</span>
+          <span><i class="part"></i><b>Partial</b> — some pieces run, rest planned</span>
+          <span><i class="plan"></i><b>Planned</b> — on the roadmap, designed here</span>
+        </div>
+
+        <div class="head" style="margin-top:26px"><div><h1 class="h">How it's built</h1><p>A control plane (the app) that operators use, and an execution layer that does the scheduled work.</p></div></div>
+        <div class="stack">
+          <div class="stk"><div class="sh">Control plane</div>
+            <ul>
+              <li><b>FastAPI</b> app <span>Python</span></li>
+              <li><b>Postgres</b> + pgvector <span>state · RAG</span></li>
+              <li><b>Railway</b> <span>hosting</span></li>
+              <li><b>Auth</b> enforced <span>public host</span></li>
+            </ul>
+          </div>
+          <div class="stk"><div class="sh">AI &amp; media</div>
+            <ul>
+              <li><b>OpenRouter</b> <span>LLM gateway</span></li>
+              <li><b>fal.ai</b> <span>image render</span></li>
+              <li><b>Brand lock</b> <span>logo compositor</span></li>
+              <li><b>Structured output</b> <span>checkable JSON</span></li>
+            </ul>
+          </div>
+          <div class="stk"><div class="sh">Execution</div>
+            <ul>
+              <li><b>GitHub Actions</b> <span>heartbeat</span></li>
+              <li><b>Scheduled tasks</b> <span>weekly cycle</span></li>
+              <li><b>Cron endpoint</b> <span>/api/cron</span></li>
+              <li><b>SEO / GEO jobs</b> <span>daily · monthly</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- theme ---------- */
+const root=document.documentElement;
+function applyTheme(t){
+  if(t) root.setAttribute("data-theme",t); else root.removeAttribute("data-theme");
+  const dark = t==="dark" || (!t && matchMedia("(prefers-color-scheme:dark)").matches);
+  document.getElementById("sun").style.display = dark?"none":"block";
+  document.getElementById("moon").style.display = dark?"block":"none";
+  drawSpark();
+}
+let theme=(()=>{try{return localStorage.getItem("mb-theme")||""}catch(e){return""}})();
+applyTheme(theme);
+document.getElementById("themebtn").onclick=()=>{
+  const cur = theme || (matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+  theme = cur==="dark"?"light":"dark";
+  try{localStorage.setItem("mb-theme",theme)}catch(e){}
+  applyTheme(theme);
+};
+
+/* ---------- mode ---------- */
+const mMan=document.getElementById("m-manual"), mAuto=document.getElementById("m-auto");
+mMan.onclick=()=>{mMan.classList.add("on");mAuto.classList.remove("on")};
+mAuto.onclick=()=>{mAuto.classList.add("on");mMan.classList.remove("on")};
+
+/* ---------- router ---------- */
+const titles={dashboard:"Dashboard",queue:"Approvals",brain:"Company Brain",content:"Content engine",inbox:"Unified inbox",seo:"SEO & reach",overview:"How it works"};
+function go(screen){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on"));
+  document.getElementById("screen-"+screen).classList.add("on");
+  document.querySelectorAll(".navitem[data-screen]").forEach(n=>n.classList.toggle("on",n.dataset.screen===screen));
+  document.getElementById("topttl").textContent=titles[screen];
+  if(screen==="dashboard") drawSpark();
+  window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});
+}
+document.querySelectorAll(".navitem[data-screen]").forEach(n=>n.onclick=()=>go(n.dataset.screen));
+document.querySelectorAll("[data-jump]").forEach(b=>b.onclick=()=>go(b.dataset.jump));
+
+/* ---------- sparkline ---------- */
+function cssv(n){return getComputedStyle(root).getPropertyValue(n).trim()}
+function drawSpark(){
+  const svg=document.getElementById("spark"); if(!svg) return;
+  const rendered=[4,3,5,4,6,5,7,7], published=[3,3,4,3,5,4,5,5];
+  const W=320,H=96,pad=6,max=8;
+  const x=i=>pad+i*((W-2*pad)/(rendered.length-1));
+  const y=v=>H-pad-(v/max)*(H-2*pad);
+  const line=a=>a.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ");
+  const area=a=>line(a)+` L ${x(a.length-1)} ${H-pad} L ${x(0)} ${H-pad} Z`;
+  const acc=cssv("--accent"),ok=cssv("--ok");
+  svg.innerHTML=
+    `<path d="${area(rendered)}" fill="${acc}" opacity="0.10"/>`+
+    `<path d="${line(rendered)}" fill="none" stroke="${acc}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`+
+    `<path d="${line(published)}" fill="none" stroke="${ok}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`+
+    `<circle cx="${x(rendered.length-1)}" cy="${y(rendered[rendered.length-1])}" r="3.4" fill="${acc}"/>`+
+    `<circle cx="${x(published.length-1)}" cy="${y(published[published.length-1])}" r="3.4" fill="${ok}"/>`;
+}
+drawSpark();
+
+/* ---------- approval queue data ---------- */
+const RENDER="neopolis-render.png";
+const items=[
+  {id:1,title:"Kokapet landlord-share 3 BHK — launch post",fmt:"4:5 · Instagram",status:"ok",statusText:"brand-lock passed",img:RENDER,
+   verdict:"approve",rt:"Approve and publish.",conf:"Confidence <b>high</b> · 4 checks passed · 1 note",
+   reason:"A clean corridor-led launch post. The creative is brand-locked, the caption stays inside Neopolis voice, and every claim traces to the Company Brain — no invented price, no unnamed developer.",
+   facts:[["Corridor","Kokapet"],["Format","1080×1350 · 4:5"],["Brand-lock","Passed · logo + navy"],["Voice","Within guardrails"],["Price claims","Range only ✓"]],
+   evidence:[["Brain","Kokapet is a live flagship corridor in the brand directory."],
+             ["Voice","Caption avoids clichés; leads with the safety question NRI buyers ask."],
+             ["Fact rule","No developer named in source → no developer credit printed."]],
+   outcome:[["+8–12%","est. reach vs avg"],["High","corridor demand"],["₹0","spend — organic"]],
+   risk:null},
+  {id:2,title:"Financial District — price-per-sqft explainer",fmt:"carousel · 5 slides",status:"warn",statusText:"one price claim to verify",img:null,thumb:"FIN\nDIST",
+   verdict:"review",rt:"Review one slide before it ships.",conf:"Confidence <b>medium</b> · 1 claim needs a human",
+   reason:"Strong educational carousel, but slide 3 states a specific ₹/sqft figure rather than a range. The fact rule requires ranges plus a verify-with-team line. Confirm the number or soften it before publishing.",
+   facts:[["Corridor","Financial District"],["Format","carousel · 5 slides"],["Brand-lock","Passed"],["Voice","Within guardrails"],["Price claims","1 exact figure ⚠"]],
+   evidence:[["Brain","Financial District ₹/sqft band is 8.5–12k in the directory."],
+             ["Fact rule","Slide 3 prints ₹10,400 as a point value, not a range."],
+             ["Voice","Otherwise clean; FAQ slide matches AEO style."]],
+   outcome:[["High","save-worthy format"],["Medium","reach est."],["₹0","spend — organic"]],
+   risk:"Publishing an exact price you can't stand behind is the one claim most likely to draw a correction. Swap to a range."},
+  {id:3,title:"Narsingi vs Kokapet — corridor comparison reel",fmt:"reel · 22s",status:"ok",statusText:"caption within voice",img:null,thumb:"NAR\nSINGI",
+   verdict:"approve",rt:"Approve and publish.",conf:"Confidence <b>high</b> · 4 checks passed",
+   reason:"A comparison reel is exactly the transactional, decision-stage content the brain is told to prefer. Both corridors are live, the framing is balanced, and the CTA points to the team rather than a hard price promise.",
+   facts:[["Corridors","Narsingi · Kokapet"],["Format","reel · 22s · 9:16"],["Brand-lock","Passed"],["Voice","Balanced comparison"],["Price claims","Ranges only ✓"]],
+   evidence:[["Brain","Both corridors are active in the directory with overlapping buyer sets."],
+             ["Voice","Neither corridor is oversold; ends on 'verify with the Neopolis team'."],
+             ["SEO","'Narsingi vs Kokapet' is an unclaimed comparison query."]],
+   outcome:[["+15%","est. reach — reels"],["High","comparison intent"],["₹0","spend — organic"]],
+   risk:null}
+];
+let active=0;
+const decisions={};
+
+function renderQueue(){
+  const box=document.getElementById("queuelist");
+  box.querySelectorAll(".qcard").forEach(n=>n.remove());
+  items.forEach((it,i)=>{
+    const b=document.createElement("button");
+    b.className="qcard"+(i===active?" active":"")+(decisions[it.id]?" decided":"");
+    const thumb = it.img?`<img src="${it.img}" alt="">`:(it.thumb||"").replace("\n","<br>");
+    b.innerHTML=`<span class="qthumb">${thumb}</span>
+      <span><span class="qt">${it.title}</span>
+      <span class="qm"><span>${it.fmt}</span><span class="roundel ${it.status}"></span><span>${decisions[it.id]?decisions[it.id].toUpperCase():it.statusText}</span></span></span>`;
+    b.onclick=()=>{active=i;renderQueue();renderCase()};
+    box.appendChild(b);
+  });
+  const waiting=items.filter(it=>!decisions[it.id]).length;
+  document.getElementById("navcount").textContent=waiting;
+  document.getElementById("qcounts").textContent=waiting?waiting+" WAITING":"ALL CLEAR";
+}
+
+function renderCase(){
+  const it=items[active], wrap=document.getElementById("casewrap");
+  const dec=decisions[it.id];
+  const previewInner = it.img
+    ? `<img src="${it.img}" alt="Rendered creative for ${it.title}">`
+    : `<div style="aspect-ratio:4/5;border-radius:10px;background:linear-gradient(160deg,var(--brand2),var(--brand));display:grid;place-items:center;color:#a9bce6;font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-align:center;line-height:1.6;box-shadow:0 18px 40px -18px rgba(0,0,0,.7)">${(it.thumb||"CREATIVE").replace("\n"," ")}<br><span style="font-size:9px;opacity:.7">RENDER PREVIEW</span></div>`;
+  wrap.innerHTML=`
+  <div class="card">
+    <div class="cardgrid">
+      <div class="preview">
+        <span class="chip">Creative preview · not yet live</span>
+        ${previewInner}
+        <div class="cap"><b>${it.title}</b><br>${it.fmt} · brand-locked to Neopolis navy</div>
+      </div>
+      <div class="case">
+        <div class="rec">
+          <span class="verdict ${it.verdict}">${it.verdict==="approve"?"Recommend":"Review"}</span>
+          <div><div class="rt">${it.rt}</div><div class="conf">${it.conf}</div></div>
+        </div>
+        <div class="block"><div class="lbl">Why</div><div class="reason">${it.reason}</div></div>
+        <div class="block"><div class="lbl">The creative</div>
+          <div class="facts">${it.facts.map(f=>`<div class="fact"><span class="fl">${f[0]}</span><span class="fv">${f[1]}</span></div>`).join("")}</div>
+        </div>
+        <div class="block"><div class="lbl">Evidence</div>
+          <div class="evidence">${it.evidence.map(e=>`<div class="ev"><span class="src">${e[0]}</span><span class="et">${e[1]}</span></div>`).join("")}</div>
+        </div>
+        <div class="block"><div class="lbl">Expected outcome</div>
+          <div class="outcome">${it.outcome.map(o=>`<div class="metric"><div class="mv">${o[0]}</div><div class="ml">${o[1]}</div></div>`).join("")}</div>
+        </div>
+        ${it.risk?`<div class="block"><div class="lbl">Risk</div><div class="risknote"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6A2 2 0 0 0 22 18L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><div class="rx"><b>Verify before publish.</b> ${it.risk}</div></div></div>`:""}
+        <div class="actions">
+          <button class="btn approve" data-act="approve">Approve &amp; publish <kbd>A</kbd></button>
+          <button class="btn changes" data-act="changes">Request changes <kbd>E</kbd></button>
+          <button class="btn reject" data-act="reject">Reject <kbd>R</kbd></button>
+        </div>
+        <div class="decided-banner ${dec||""} ${dec?"show":""}" id="banner">${dec?bannerText(dec):""}</div>
+      </div>
+    </div>
+  </div>`;
+  wrap.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>decide(b.dataset.act));
+}
+function bannerText(d){
+  return d==="approve"?"✓ Approved — queued to publish":
+         d==="reject"?"✕ Rejected — sent back to the brain":
+         "✎ Changes requested — returned with your note";
+}
+function decide(act){
+  const it=items[active];
+  decisions[it.id]=act;
+  const banner=document.getElementById("banner");
+  banner.className="decided-banner "+act+" show";
+  banner.textContent=bannerText(act);
+  renderQueue();
+  // advance to next undecided
+  setTimeout(()=>{
+    const next=items.findIndex(x=>!decisions[x.id]);
+    if(next>=0){active=next;renderQueue();renderCase()}
+    else{document.getElementById("casewrap").innerHTML=
+      `<div class="card"><div class="emptyq"><div class="eh">Queue clear.</div>Every creative has a decision. New work lands here after the next cycle.</div></div>`}
+  },650);
+}
+document.addEventListener("keydown",e=>{
+  if(!document.getElementById("screen-queue").classList.contains("on"))return;
+  const k=e.key.toLowerCase();
+  if(k==="a")decide("approve"); else if(k==="e")decide("changes"); else if(k==="r")decide("reject");
+});
+
+/* brand switcher (single-brand prototype) */
+document.getElementById("brandsel").onclick=()=>{
+  const s=document.getElementById("brandsel");
+  s.animate([{transform:"scale(1)"},{transform:"scale(.98)"},{transform:"scale(1)"}],{duration:180});
+};
+
+/* init */
+const r=new Image();
+r.onload=()=>{const a=document.getElementById("attn-render");if(a)a.src=RENDER};
+r.src=RENDER;
+document.getElementById("attn-render").src=RENDER;
+renderQueue();
+renderCase();
+</script>
