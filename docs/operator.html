@@ -448,7 +448,7 @@ a{color:var(--accent-ink);text-decoration:none}
     <button class="navitem" data-screen="content">
       <svg viewBox="0 0 24 24"><path d="M4 4h16v12H4z"/><path d="M8 20h8M12 16v4"/></svg>Content<span class="soontag live">live</span></button>
     <button class="navitem" data-screen="inbox">
-      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Inbox<span class="soontag plan">planned</span></button>
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Inbox<span class="soontag part">partial</span></button>
     <button class="navitem" data-screen="seo">
       <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 20V9"/></svg>SEO &amp; Reach<span class="soontag part">partial</span></button>
 
@@ -769,9 +769,9 @@ a{color:var(--accent-ink);text-decoration:none}
             <p>One place for every conversation — WhatsApp, Instagram, Facebook, email and website chat — where the brain drafts a reply in the brand's voice and you send it with one tap.</p>
           </div>
         </div>
-        <div class="statusbar plan">
-          <span class="badge">Planned</span>
-          <span class="sx"><b>Designed, not yet built.</b> This is the target for the Communication engine (§9). WhatsApp lands first, then Instagram / Facebook DMs and website chat. Shown here as the intended layout — no live messages are connected.</span>
+        <div class="statusbar part">
+          <span class="badge">Partial</span>
+          <span class="sx"><b>Core built.</b> The inbox stores conversations and messages, and the brain drafts a reply in the brand voice that you approve before it sends (§15). Live channel delivery — WhatsApp first — is the remaining edge; sends are recorded as simulated until each platform bridge is wired. Layout shown with sample messages.</span>
         </div>
         <div class="inbox">
           <div class="chanlist">
@@ -909,14 +909,14 @@ a{color:var(--accent-ink);text-decoration:none}
             </ul>
           </div>
 
-          <div class="fcard plan">
+          <div class="fcard part">
             <div class="fch"><span class="fic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
-              <h3>Communication inbox<small>every channel · §9</small></h3><span class="sbadge plan">Planned</span></div>
+              <h3>Communication inbox<small>every channel · §9</small></h3><span class="sbadge part">Partial</span></div>
             <ul>
-              <li><b>Unified inbox</b> — WhatsApp, Instagram, Facebook, email, website chat.</li>
-              <li><b>Drafted replies</b> — in brand voice, you send with one tap.</li>
-              <li><b>Approval on sensitive replies</b> — nothing risky auto-sends.</li>
-              <li><b>Contact &amp; conversation history</b> — one thread per person.</li>
+              <li><b>Conversations &amp; messages</b> — one thread per contact, per channel <i>(built)</i>.</li>
+              <li><b>Brain-drafted replies</b> — in brand voice, following the fact rules <i>(built)</i>.</li>
+              <li><b>Human sends</b> — every reply waits for your approval, §15 <i>(built)</i>.</li>
+              <li><b>Live delivery</b> — WhatsApp first, then IG / FB / email / web <i>(planned)</i>.</li>
             </ul>
           </div>
 
