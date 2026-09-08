@@ -5,7 +5,7 @@ specialist **agents** that discover ideas, generate copy + media (image, carouse
 avatar video, short-form video, voice), schedule, and (after a human approves) publish —
 then learn from performance.
 
-- **Compute:** GitHub Actions (serverless cron + manual dispatch). No server to host.
+- **Compute:** the real pipeline runs in the sibling **marketing-brain** app (Railway). A GitHub Actions `heartbeat` workflow drives it on a schedule; the per-stage `run_stage` commands below remain for local/mock development and the `ci` workflow.
 - **Control plane / UI / memory:** Airtable (default) or Google Sheets. Swappable.
 - **Approval:** Nothing publishes until a human flips a record to `Approved`.
 - **Runs with zero API keys** in *mock mode*, so CI is always green.
