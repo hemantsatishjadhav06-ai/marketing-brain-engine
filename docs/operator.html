@@ -523,6 +523,24 @@ a{color:var(--accent-ink);text-decoration:none}
 .entitygrid .e{font-family:var(--mono);font-size:11px;border:1px solid var(--line2);border-radius:7px;padding:4px 9px;background:var(--panel2);color:var(--muted)}
 .entitygrid .e.built{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 40%,transparent)}
 
+/* how-it-works hero with a real creative */
+.ovhero2{display:grid;grid-template-columns:1fr 280px;gap:28px;align-items:center}
+@media(max-width:800px){.ovhero2{grid-template-columns:1fr}}
+.ovcreative{margin:0;display:flex;flex-direction:column;gap:10px}
+.ovcreative img{width:100%;border-radius:12px;box-shadow:0 22px 50px -20px rgba(0,0,0,.65);display:block;background:#0a1f52;aspect-ratio:4/5;object-fit:cover}
+.ovcreative figcaption{font-family:var(--mono);font-size:10.5px;line-height:1.5;color:#9fb4e6;display:flex;gap:7px;align-items:flex-start}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#5cc48c;box-shadow:0 0 0 3px rgba(92,196,140,.25);flex:none;margin-top:3px}
+
+/* described agent directory (blueprint map) */
+.bpshows{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin:9px 0 4px;line-height:1.5}
+.agrows{display:flex;flex-direction:column;margin-top:10px;border-top:1px solid var(--line)}
+.agrow{display:grid;grid-template-columns:30px 1fr auto;gap:11px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line)}
+.agrow:last-child{border-bottom:0}
+.agrow .anum{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--faint);text-align:right}
+.agrow .ainfo{min-width:0}
+.agrow .ainfo b{font-size:13px;font-weight:700;letter-spacing:-.01em}
+.agrow .arole{display:block;font-size:12px;color:var(--muted);line-height:1.45;margin-top:2px}
+
 #toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);background:var(--ink);color:var(--paper);
   font-size:12.5px;font-weight:500;padding:11px 16px;border-radius:10px;box-shadow:var(--shadow);opacity:0;pointer-events:none;
   transition:opacity .18s,transform .18s;z-index:20;max-width:90vw;text-align:center}
@@ -947,11 +965,17 @@ a{color:var(--accent-ink);text-decoration:none}
 
       <!-- ============ OVERVIEW / HOW IT WORKS ============ -->
       <section class="screen" id="screen-overview">
-        <div class="ovhero">
-          <div class="eyebrow">The whole product · in one page</div>
-          <h2>One brain per brand. Agents do the work. A human always says yes.</h2>
-          <p>Marketing Brain gives each business its own AI marketing team — a shared source of truth, specialist agents that produce real content, and a human approval gate so nothing goes out that the brand wouldn't say itself. Below is everything it does, and how the pieces fit.</p>
-          <div class="oneline"><span>Company Brain</span><span>→ Orchestrator</span><span>→ Specialist agents</span><span>→ Human approval</span><span>→ Publish</span><span>→ Learn</span></div>
+        <div class="ovhero ovhero2">
+          <div class="ovtext">
+            <div class="eyebrow">The whole product · in one page</div>
+            <h2>One brain per brand. Agents do the work. A human always says yes.</h2>
+            <p>Marketing Brain gives each business its own AI marketing team — a shared source of truth, specialist agents that produce real content, and a human approval gate so nothing goes out that the brand wouldn't say itself. Below is every agent and everything it does, and how the pieces fit.</p>
+            <div class="oneline"><span>Company Brain</span><span>→ Orchestrator</span><span>→ Specialist agents</span><span>→ Human approval</span><span>→ Publish</span><span>→ Learn</span></div>
+          </div>
+          <figure class="ovcreative">
+            <img id="ovhero-render" alt="A real Neopolis Infra creative, brand-locked and rendered by the Content engine">
+            <figcaption><span class="live-dot"></span>Real output — 4:5, brand-locked to Neopolis navy, rendered live by the Content engine (fal.ai).</figcaption>
+          </figure>
         </div>
 
         <div class="head"><div><h1 class="h">How it works</h1><p>Six stages, every time. The brand's knowledge goes in one end; approved, on-brand marketing comes out the other — and what worked feeds back in.</p></div></div>
@@ -1094,7 +1118,7 @@ a{color:var(--accent-ink);text-decoration:none}
           </div>
         </div>
 
-        <div class="head" style="margin-top:28px"><div><h1 class="h">The full blueprint — all 36 agents</h1><p>Every agent from the Master Blueprint, grouped into the module that surfaces it, each dot coloured by its honest status. This is the map the whole console is built to.</p></div></div>
+        <div class="head" style="margin-top:28px"><div><h1 class="h">The full blueprint — all 36 agents</h1><p>Every agent from the Master Blueprint, grouped into the module that surfaces it — with what it does and its honest status. This is the map the whole console is built to.</p></div></div>
         <div class="leg" style="margin-bottom:14px">
           <span><i class="live"></i><b>Live</b></span><span><i class="part"></i><b>Partial</b></span><span><i class="plan"></i><b>Planned</b></span>
         </div>
@@ -1262,8 +1286,14 @@ function renderBlueprint(){
   const mm=document.getElementById("bpmapmount");
   if(mm) mm.innerHTML=mods.map(m=>{
     const badge='<span class="sbadge '+(SB[m.module_status]||"plan")+'">'+esc(m.module_status)+'</span>';
-    const ags=(m.agents||[]).map(a=>'<span class="ag"><span class="d '+esc(a.status)+'"></span>'+esc((a.num?a.num+' · ':'')+a.name)+'</span>').join('');
-    return '<div class="bpm"><div class="h"><h4>'+esc(m.nav_label||m.module)+'</h4>'+badge+'<span class="ref">'+esc(m.blueprint_ref||'')+'</span></div>'+(ags?'<div class="ags">'+ags+'</div>':'')+'</div>';
+    const shows=(m.shows&&m.shows.length)?'<div class="bpshows">'+m.shows.slice(0,6).map(s=>esc(s)).join(' · ')+'</div>':'';
+    const ags=(m.agents||[]).map(a=>
+      '<div class="agrow"><span class="anum">'+esc(a.num!=null?a.num:'–')+'</span>'+
+      '<div class="ainfo"><b>'+esc(a.name)+'</b>'+(a.role?'<span class="arole">'+esc(a.role)+'</span>':'')+'</div>'+
+      '<span class="pill '+({live:"ok",partial:"warn",planned:"risk"}[a.status]||"")+'">'+esc(a.status)+'</span></div>'
+    ).join('');
+    return '<div class="bpm"><div class="h"><h4>'+esc(m.nav_label||m.module)+'</h4>'+badge+'<span class="ref">'+esc(m.blueprint_ref||'')+'</span></div>'+
+      shows+(ags?'<div class="agrows">'+ags+'</div>':'')+'</div>';
   }).join('');
   const loop=(SPECS.map&&SPECS.map.loop)||[];
   const lm=document.getElementById("loopmount");
@@ -1438,6 +1468,7 @@ const r=new Image();
 r.onload=()=>{const a=document.getElementById("attn-render");if(a)a.src=RENDER};
 r.src=RENDER;
 document.getElementById("attn-render").src=RENDER;
+{const oh=document.getElementById("ovhero-render"); if(oh) oh.src=RENDER;}
 renderQueue();
 renderCase();
 renderBlueprint();
